@@ -16,6 +16,7 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
@@ -25,36 +26,24 @@
     <!--[if lt IE 10]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div id="map-canvas"></div>
-    <div id="search-widget">
-        <div class="form-group">
-            <input id="search-box" class="form-control" type="text" placeholder="Search Box" data-bind="textInput: searchText">
-        </div>
-        <div class="form-group">
-            <div class="checkbox-inline">
-                <label>
-                    <input type="checkbox" data-bind="checked: showHotels"> Hotels
-                </label>
+    <!-- Always shows a header, even in smaller screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">City of Cáceres</span>
             </div>
-            <div class="checkbox-inline">
-                <label>
-                    <input type="checkbox" data-bind="checked: showRestaurants"> Restaurants
-                </label>
-            </div>
-            <div class="checkbox-inline">
-                <label>
-                    <input type="checkbox" data-bind="checked: showOthers"> Others
-                </label>
-            </div>
+        </header>
+        <div class="mdl-layout__drawer">
         </div>
-        <div id="search-results">
-            <ul class="list-group" data-bind="foreach: filteredPlacesList">
-                <li class="list-group-item">
-                    <h3 data-bind="text: name"></h3>
-                    <h4 data-bind="text: type"></h4>
-                </li>
-            </ul>
-        </div>
+        <main class="mdl-layout__content">
+            <div class="page-content">
+                <div id="mdl-grid">
+                  <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
+                </div>
+            </div>
+        </main>
+    </div>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
