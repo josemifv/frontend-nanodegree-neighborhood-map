@@ -35,11 +35,15 @@
             </div>
         </header>
         <div class="mdl-layout__drawer">
+          <span class="mdl-layout-title">Places of interest</span>
+          <ul class="mdl-navigation" data-bind="foreach: filteredPlacesList">
+            <li class="mdl-navigatio__link" href=""><span data-bind="text: name"></span></li>
+          </ul>
         </div>
         <main class="mdl-layout__content">
             <div class="page-content">
                 <div id="mdl-grid">
-                  <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
+                    <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
                 </div>
             </div>
         </main>
