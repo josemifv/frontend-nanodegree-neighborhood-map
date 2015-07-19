@@ -186,7 +186,7 @@ var appViewModel = function() {
     });
 
     self.updateMarkers = ko.computed(function() {
-        addMarkers(self.filteredPlacesList);
+        //addMarkers(self.filteredPlacesList);
     });
 };
 

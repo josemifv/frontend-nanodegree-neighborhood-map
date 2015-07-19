@@ -1,6 +1,7 @@
 var map;
 var placesService;
 var infoWindow;
+var placeTypes = ['hotel', 'restaurant', 'point_of_worthship'];
 
 function initialize() {
     var caceres = new google.maps.LatLng(39.476, -6.372);
@@ -19,14 +20,18 @@ function initialize() {
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     map.setCenter(caceres);
 
-    var request = {
-        location: caceres,
-        radius: 1000,
-    };
-
     infoWindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, callback);
+    placesService = new google.maps.places.PlacesService(map);
+    searchNearby(caceres, placeTypes);
+}
+
+function searchNearby(location, types) {
+    var request = {
+        location: location,
+        radius: 1000,
+        type: types
+    };
+    placesService.nearbySearch(request, callback);
 }
 
 function callback(results, status) {
@@ -45,8 +50,8 @@ function createMarker(place) {
     });
 
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
+        infoWindow.setContent(place.name);
+        infoWindow.open(map, this);
     });
 }
 
