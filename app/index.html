@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="/bower_components/material-design-lite/material.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-    <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
     <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
@@ -35,10 +35,11 @@
             </div>
         </header>
         <div class="mdl-layout__drawer">
-          <span class="mdl-layout-title">Places of interest</span>
-          <ul class="mdl-navigation" data-bind="foreach: filteredPlacesList">
-            <li class="mdl-navigatio__link" href=""><span data-bind="text: name"></span></li>
-          </ul>
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link"><i class="material-icons">local_hotel</i>Where to sleep</a>
+                <a class="mdl-navigation__link"><i class="material-icons">local_dining</i>Where to eat</a>
+                <a class="mdl-navigation__link"><i class="material-icons">place</i>Other stuff</a>
+            </nav>
         </div>
         <main class="mdl-layout__content">
             <div class="page-content">
@@ -66,7 +67,7 @@
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=false&libraries=places"></script>
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/knockout/dist/knockout.js"></script>
@@ -74,8 +75,8 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
-    <script src="scripts/model.js"></script>
     <script src="scripts/main.js"></script>
+    <script src="scripts/model.js"></script>
     <!-- endbuild -->
 </body>
 

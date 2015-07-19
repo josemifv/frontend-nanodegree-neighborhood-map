@@ -141,6 +141,7 @@ var Place = function(data) {
     this.phone = data.phone;
     this.website = data.website;
     this.email = data.email;
+    this.coordinates = data.coordinates;
 };
 
 var appViewModel = function() {
@@ -157,31 +158,35 @@ var appViewModel = function() {
     });
 
     self.placeTypeFilter = ko.computed(function() {
-      var filter = [];
-      if (self.showHotels()) {
-        filter.push("hotel");
-      }
-      if (self.showRestaurants()) {
-        filter.push("Restaurant");
-      }
-      if (self.showOthers()) {
-        filter.push("Other");
-      }
-      return filter;
+        var filter = [];
+        if (self.showHotels()) {
+            filter.push("hotel");
+        }
+        if (self.showRestaurants()) {
+            filter.push("restaurant");
+        }
+        if (self.showOthers()) {
+            filter.push("other");
+        }
+        return filter;
     });
 
     self.filteredPlacesList = ko.computed(function() {
-            var textFilter = self.searchText().toLowerCase();
-            var placeTypeFilter = self.placeTypeFilter();
+        var textFilter = self.searchText().toLowerCase();
+        var placeTypeFilter = self.placeTypeFilter();
 
-            if (!textFilter && placeTypeFilter.length === 3) {
-                return self.placesList();
-            }
+        if (!textFilter && placeTypeFilter.length === 3) {
+            return self.placesList();
+        }
 
-            // Filter results
-            return ko.utils.arrayFilter(self.placesList(), function(placesListItem) {
-                    return placesListItem.name.toLowerCase().indexOf(textFilter) >= 0 && placeTypeFilter.indexOf(placesListItem.type) > -1;
-            });
+        // Filter results
+        return ko.utils.arrayFilter(self.placesList(), function(placesListItem) {
+            return placesListItem.name.toLowerCase().indexOf(textFilter) >= 0 && placeTypeFilter.indexOf(placesListItem.type) > -1;
+        });
+    });
+
+    self.updateMarkers = ko.computed(function() {
+        addMarkers(self.filteredPlacesList);
     });
 };
 
