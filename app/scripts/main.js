@@ -1,97 +1,85 @@
-var map;
-var placesService;
-var infoWindow;
-var placeTypes = ['lodging'];
-
-function initialize() {
-    var caceres = new google.maps.LatLng(39.476, -6.372);
-    var mapOptions = {
-        zoom: 15,
-        disableDefaultUI: true,
-        styles: [{
-            featureType: "poi",
-            elementType: "labels",
-            stylers: [{
-                visibility: "off"
-            }]
-        }]
+var assignIfNotUndefined = function(value) {
+    if (value) {
+        return value;
     }
-
-    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    map.setCenter(caceres);
-
-    infoWindow = new google.maps.InfoWindow();
-    placesService = new google.maps.places.PlacesService(map);
-    searchNearby(caceres, placeTypes);
-
-    ko.applyBindings(new appViewModel());
+    return '';
 }
 
-function searchNearby(location, types) {
-    var request = {
-        location: location,
-        radius: 1000,
-        type: types
+var Event = function(data) {
+    this.title = assignIfNotUndefined(data['title']);
+    this.website = assignIfNotUndefined(data['website']);
+    this.date = assignIfNotUndefined(data['startDate']);
+    this.image = assignIfNotUndefined(data.image[3]['#text']);
+    if (data['venue']) {
+        this.venue = new Venue(data.venue);
+    }
+};
+
+var Venue = function(data) {
+    this.name = data.name;
+    this.location = {
+        "latitude": data.location['geo:point']['geo:lat'],
+        "longitude": data.location['geo:point']['geo:long']
     };
-    placesService.nearbySearch(request, searchNearbyCallback);
-}
+    this.street = data.location.street;
+    this.city = data.location.city;
+    this.country = data.location.country;
+    this.postalcode = data.postalcode;
+    this.website = data.website;
+};
 
-function searchNearbyCallback(results, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
+var appViewModel = function() {
+    var self = this;
+
+    self.xhr = undefined;
+
+    self.searchText = ko.observable('Metallica').extend({
+        rateLimit: {
+            method: "notifyWhenChangesStop",
+            timeout: 500
         }
-    } else {
-        console.log(status);
-    }
-}
-
-function getDetailsCallback(place, status) {
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        infoWindow.setContent(createInfoWindowContent(place));
-    } else {
-        console.log(status);
-    }
-}
-
-function createMarker(place) {
-    var placeLoc = place.geometry.location;
-    var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
     });
-    marker.setIcon(place.icon);
 
-    google.maps.event.addListener(marker, 'click', function() {
-        bounceALittle(marker);
-        var request = {
-            placeId: place.place_id
-        };
-        placesService.getDetails(request, getDetailsCallback);
-        infoWindow.open(map, this);
+    self.eventList = ko.observableArray([]);
+
+    self.filteredEventList = ko.computed(function() {
+        return ko.utils.arrayFilter(self.eventList(), function(event) {
+            return true
+        });
     });
-}
 
-function createInfoWindowContent(place) {
-    var infocontent = '<div class="mdl-card">';
-    infocontent += '<div class="mdl-card__title"><h2 class="mdl-card__title-text">' + place.name + '</h2></div>';
-    infocontent += '<div class="mdl-card__media"><img src="' + place.photos[0].getUrl({ maxWidth: 220, maxHeight: 140 }) + '" width="220" height="140" border="0" alt="" style="padding:20px;"></div>';
-    infocontent += '<div class="mdl-card__supporting-text">' + place.formatted_address + '</div>';
-    infocontent += '<div class="mdl-card__supporting-text">' + place.formatted_phone_number + '</div>';
-    infocontent += '<div class="mdl-card__supporting-text">' + place.price_level + '</div>';
-    infocontent += '<div class="mdl-card__supporting-text">' + place.rating + '</div>';
-    infocontent += '<div class="mdl-card__supporting-text"><a href="' + place.website + '" target="_blank">' + place.website + '</a></div>';
-    infocontent += '</div>';
-    infocontent += '</div>';
-    return infocontent;
-}
+    self.searchEvents = ko.computed(function() {
+        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&artist=';
 
-function bounceALittle(marker) {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function() {
-        marker.setAnimation(null);
-    }, 1400);
-}
+        // Clear previous results
+        self.eventList([]);
+        if (self.xhr) {
+            self.xhr.abort();
+        }
 
+        self.xhr = $.ajax({
+            url: lastFmAPIURL + self.searchText(),
+            success: function(data) {
+                if (!data.error) {
+                    var results = data.events.event;
+                    var numResults = (data.events['@attr'] != undefined) ? data.events['@attr'].total : data.events.total;
+                    // The API DOES NOT return an array if there is only one result
+                    if (numResults == 1) {
+                        self.eventList.push(new Event(results));
+                    } else {
+                        for (var i = 0; i < numResults; i++) {
+                            self.eventList.push(new Event(results[i]));
+                        }
+                    }
+                } else {
+                    console.log(data.message);
+                }
+            },
+            error: function(e) {
+                console.log(e.message);
+            }
+        });
+    });
+};
 
-google.maps.event.addDomListener(window, 'load', initialize);
+ko.applyBindings(new appViewModel());
