@@ -30,6 +30,7 @@ var Venue = function(data) {
 
 var appViewModel = function() {
     var self = this;
+    var map, infoWindow, markers;
 
     self.xhr = undefined;
 
@@ -80,6 +81,28 @@ var appViewModel = function() {
             }
         });
     });
+
+    var initializeMap = function() {
+        var caceres = new google.maps.LatLng(39.476, -6.372);
+        var mapOptions = {
+            center: caceres,
+            zoom: 3,
+            disableDefaultUI: true,
+            styles: [{
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [{
+                    visibility: "off"
+                }]
+            }]
+        }
+
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        $('#progress-bar').hide();
+    };
+
+    initializeMap();
 };
 
+// TODO Add to load or ready event
 ko.applyBindings(new appViewModel());

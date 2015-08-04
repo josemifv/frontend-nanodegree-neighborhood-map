@@ -1,9 +1,9 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta name="description" content="">
+    <meta name="description" content="On the road is a non-commercial website that allow users to check if an artist is on tour. This work is part of Udacity's Front-End Developer Nanodegree">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>On the road</title>
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -34,8 +34,7 @@
                 <!-- Title -->
                 <span class="mdl-layout-title">On the road</span>
                 <div class="mdl-layout-spacer"></div>
-                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
-                  mdl-textfield--floating-label mdl-textfield--align-right">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
                     <label class="mdl-button mdl-js-button mdl-button--icon" for="fixed-header-drawer-exp">
                         <i class="material-icons">search</i>
                     </label>
@@ -47,12 +46,12 @@
         </header>
         <div class="mdl-layout__drawer"></div>
         <div id="progress-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
-        <main class="mdl-layout__content">
+        <main class="mdl-layout__content mdl-color--grey-100">
             <div class="page-content">
-                <div id="mdl-grid">
+                <div  id="map-container" class="mdl-grid">
                     <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
-                    <div id="results-list" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone mdl-color--grey-100 mdl-grid" data-bind="foreach: eventList">
-                        <div class="mdl-card mdl-cell">
+                    <div id="results-list" class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--4-col-phone mdl-grid mdl-color--grey-100" data-bind="foreach: eventList">
+                        <div class="mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                             <div class="mdl-card__title" data-bind="attr: { style: 'background: url(\'' + image + '\') center / cover' }">
                                 <h2 class="mdl-card__title-text" data-bind="text: title"></h2>
                             </div>
