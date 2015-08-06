@@ -32,44 +32,41 @@ var appViewModel = function() {
     var self = this;
     var map, infoWindow, markers;
 
-    self.xhr = undefined;
-
-    self.searchText = ko.observable('Metallica').extend({
-        rateLimit: {
-            method: "notifyWhenChangesStop",
-            timeout: 500
-        }
-    });
-
-    self.eventList = ko.observableArray([]);
-
-    self.filteredEventList = ko.computed(function() {
-        return ko.utils.arrayFilter(self.eventList(), function(event) {
-            return true
-        });
-    });
-
-    self.searchEvents = ko.computed(function() {
-        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&artist=';
+    self.loadEventsFromLastFm = function(artist, pageToLoad) {
+        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=5&artist=@@artist@@&page=@@page@@';
 
         // Clear previous results
-        self.eventList([]);
+        if (!pageToLoad || pageToLoad == 1) {
+            self.eventList([]);
+            self.totalPages(0);
+            self.currentPage(0);
+        }
+
         if (self.xhr) {
             self.xhr.abort();
         }
 
+        lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad);
+
         self.xhr = $.ajax({
-            url: lastFmAPIURL + self.searchText(),
+            url: lastFmAPIURL,
             success: function(data) {
                 if (!data.error) {
-                    var results = data.events.event;
-                    var numResults = (data.events['@attr'] != undefined) ? data.events['@attr'].total : data.events.total;
-                    // The API DOES NOT return an array if there is only one result
-                    if (numResults == 1) {
-                        self.eventList.push(new Event(results));
-                    } else {
-                        for (var i = 0; i < numResults; i++) {
-                            self.eventList.push(new Event(results[i]));
+                    if (data.events.event) {
+                        var results = data.events.event;
+                        var numResults = (data.events['@attr'] != undefined) ? Math.min(data.events['@attr'].perPage, data.events['@attr'].total) : data.events.total;
+
+                        // The API DOES NOT return an array if there is only one result
+                        if (numResults == 1) {
+                            self.eventList.push(new Event(results));
+                            self.totalPages(1);
+                            self.currentPage(1);
+                        } else {
+                            for (var i = 0; i < results.length; i++) {
+                                self.eventList.push(new Event(results[i]));
+                            }
+                            self.totalPages(data.events['@attr'].totalPages);
+                            self.currentPage(data.events['@attr'].page);
                         }
                     }
                 } else {
@@ -80,9 +77,9 @@ var appViewModel = function() {
                 console.log(e.message);
             }
         });
-    });
+    };
 
-    var initializeMap = function() {
+    self.initializeMap = function() {
         var caceres = new google.maps.LatLng(39.476, -6.372);
         var mapOptions = {
             center: caceres,
@@ -101,7 +98,44 @@ var appViewModel = function() {
         $('#progress-bar').hide();
     };
 
-    initializeMap();
+    self.xhr = undefined;
+
+    self.searchText = ko.observable('Metallica').extend({
+        rateLimit: {
+            method: "notifyWhenChangesStop",
+            timeout: 500
+        }
+    });
+
+    self.eventList = ko.observableArray([]);
+    self.totalPages = ko.observable();
+    self.currentPage = ko.observable();
+
+    self.filteredEventList = ko.computed(function() {
+        return ko.utils.arrayFilter(self.eventList(), function(event) {
+            return true;
+        });
+    });
+
+    self.searchEvents = ko.computed(function() {
+        self.loadEventsFromLastFm(self.searchText(), 1)
+    });
+
+    self.isThereResults = function() {
+        return self.filteredEventList().length > 0;
+    };
+
+    self.isLastPage = function() {
+        return self.currentPage() == self.totalPages();
+    };
+
+    self.loadNextPage = function() {
+        if (self.currentPage() < self.totalPages()) {
+            self.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
+        }
+    };
+
+    self.initializeMap();
 };
 
 // TODO Add to load or ready event

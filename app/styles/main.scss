@@ -1,8 +1,9 @@
 // bower:scss
 // endbower
 //
-$font-stack: 'Roboto', 'Helvetica', 'sans-serif';
-
+$font-stack: 'Roboto',
+'Helvetica',
+'sans-serif';
 .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;
@@ -24,8 +25,8 @@ body {
 }
 
 .page-content {
-  width: 100%;
-  height: inherit;
+    width: 100%;
+    height: inherit;
 }
 
 #progress-bar {
@@ -33,9 +34,9 @@ body {
 }
 
 #map-container {
-  position: relative;
-  padding: 0px;
-  height: 94vh;
+    position: relative;
+    padding: 0px;
+    height: 94vh;
 }
 
 #map-canvas {
@@ -46,10 +47,15 @@ body {
 }
 
 #results-list {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  bottom: 5px;
-  z-index: 99;
-  overflow: scroll;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+    z-index: 5;
+    overflow: auto;
+}
+
+#more {
+  display: block;
+  width: 100%;
 }
