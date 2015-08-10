@@ -1,31 +1,26 @@
-var assignIfNotUndefined = function(value) {
-    if (value) {
-        return value;
-    }
-    return '';
-}
-
 var Event = function(data) {
-    this.title = assignIfNotUndefined(data['title']);
-    this.website = assignIfNotUndefined(data['website']);
-    this.date = assignIfNotUndefined(data['startDate']);
-    this.image = assignIfNotUndefined(data.image[3]['#text']);
+    this.title = data['title'] || '';
+    this.website = data['website'] || '';
+    this.date = data['startDate'] || '';
+    this.image = data.image[3]['#text'] || 'images/concert.jpg';
     if (data['venue']) {
         this.venue = new Venue(data.venue);
     }
 };
 
 var Venue = function(data) {
-    this.name = data.name;
-    this.location = {
-        "latitude": data.location['geo:point']['geo:lat'],
-        "longitude": data.location['geo:point']['geo:long']
-    };
+    this.name = data.name || '';
+    if (data.location) {
+        this.location = {
+            "latitude": data.location['geo:point']['geo:lat'],
+            "longitude": data.location['geo:point']['geo:long']
+        }
+    }
     this.street = data.location.street;
     this.city = data.location.city;
     this.country = data.location.country;
-    this.postalcode = data.postalcode;
-    this.website = data.website;
+    this.postalcode = data.postalcode || '';
+    this.website = data.website || '';
 };
 
 var appViewModel = function() {

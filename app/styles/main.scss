@@ -1,9 +1,8 @@
 // bower:scss
 // endbower
 //
-$font-stack: 'Roboto',
-'Helvetica',
-'sans-serif';
+$font-stack: 'Roboto', 'Helvetica', 'sans-serif';
+
 .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;
@@ -22,6 +21,7 @@ body {
 .mdl-card__title {
     height: 176px;
     color: #FFF;
+    background: #3E4EB8;
 }
 
 .page-content {
