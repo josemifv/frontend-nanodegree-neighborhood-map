@@ -25,7 +25,8 @@ var Venue = function(data) {
 
 var appViewModel = function() {
     var self = this;
-    var map, infoWindow, markers;
+    var map, infoWindow;
+    var markers = [];
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
         var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=5&artist=@@artist@@&page=@@page@@';
@@ -74,6 +75,25 @@ var appViewModel = function() {
         });
     };
 
+    self.clearMarkers = function() {
+        markers.forEach(function(marker) {
+            if (marker) {
+                marker.setMap(null);
+            }
+        });
+        markers = [];
+    };
+
+    self.createMarker = function(venue) {
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(venue.location.latitude, venue.location.longitude),
+            animation: google.maps.Animation.DROP
+        });
+        marker.setMap(map);
+
+        return marker;
+    };
+
     self.initializeMap = function() {
         var caceres = new google.maps.LatLng(39.476, -6.372);
         var mapOptions = {
@@ -110,6 +130,14 @@ var appViewModel = function() {
         return ko.utils.arrayFilter(self.eventList(), function(event) {
             return true;
         });
+    });
+
+    self.markersList = ko.computed(function() {
+        self.clearMarkers();
+        ko.utils.arrayForEach(self.filteredEventList(), function(event) {
+            markers.push(self.createMarker(event.venue));
+        });
+        console.log(markers);
     });
 
     self.searchEvents = ko.computed(function() {
