@@ -84,14 +84,37 @@ var appViewModel = function() {
         markers = [];
     };
 
-    self.createMarker = function(venue) {
+    self.createMarker = function(event) {
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(venue.location.latitude, venue.location.longitude),
+            position: new google.maps.LatLng(event.venue.location.latitude, event.venue.location.longitude),
             animation: google.maps.Animation.DROP
         });
         marker.setMap(map);
-
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(self.createInfoWindowContent(event));
+            infowindow.open(map, this);
+        });
         return marker;
+    };
+
+    self.createInfoWindowContent = function(event) {
+        var content = ' \
+          <div class="mdl-card mdl-shadow--2dp demo-card-square" style="border: solid"> \
+            <div class="mdl-card__title mdl-card--expand"> \
+              <h2 class="mdl-card__title-text">@@name@@</h2> \
+            </div> \
+            <div class="mdl-card__supporting-text"> \
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
+              Aenan convallis. \
+            </div> \
+            <div class="mdl-card__actions mdl-card--border"> \
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"> \
+              View Updates \
+            </a> \
+          </div> \
+        </div> \
+      ';
+      return content.replace('@@name@@', event.title);
     };
 
     self.initializeMap = function() {
@@ -110,6 +133,7 @@ var appViewModel = function() {
         }
 
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+        infowindow = new google.maps.InfoWindow();
         $('#progress-bar').hide();
     };
 
@@ -135,7 +159,7 @@ var appViewModel = function() {
     self.markersList = ko.computed(function() {
         self.clearMarkers();
         ko.utils.arrayForEach(self.filteredEventList(), function(event) {
-            markers.push(self.createMarker(event.venue));
+            markers.push(self.createMarker(event));
         });
         console.log(markers);
     });
