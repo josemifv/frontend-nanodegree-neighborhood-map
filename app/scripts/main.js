@@ -29,7 +29,7 @@ var appViewModel = function() {
     var markers = [];
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
-        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=5&artist=@@artist@@&page=@@page@@';
+        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=30&artist=@@artist@@&page=@@page@@';
 
         // Clear previous results
         if (!pageToLoad || pageToLoad == 1) {
