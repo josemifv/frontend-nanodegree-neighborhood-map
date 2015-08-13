@@ -2,8 +2,10 @@
 /* global google */
 /* exported MapsService */
 
-var MapsService = function() {
+var MapsService = new (function() {
     'use strict';
+
+    var self = this;
 
     var map, infoWindow;
     var markers = [];
@@ -45,7 +47,6 @@ var MapsService = function() {
         return marker;
     };
 
-
     self.createInfoWindowContent = function(event) {
         var content = '<div class="mdl-card mdl-shadow--2dp demo-card-square">';
         content += '<div class="mdl-card__title mdl-card--expand">';
@@ -65,7 +66,7 @@ var MapsService = function() {
         return content.replace('@@name@@', event.title);
     };
 
-    self.initializeMap = function(domElement) {
+    self.initializeMap = function(mapCanvasId) {
         var caceres = new google.maps.LatLng(39.476, -6.372);
         var mapOptions = {
             center: caceres,
@@ -80,14 +81,11 @@ var MapsService = function() {
             }]
         };
 
-        return new google.maps.Map(domElement, mapOptions);
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     };
 
     self.initializeInfoWindow = function() {
         // Initialize the InfoWindow
-        return new google.maps.InfoWindow();
+        infoWindow = new google.maps.InfoWindow();
     };
-
-    map = self.initializeMap();
-    infoWindow = self.initializeInfoWindow();
-};
+})();

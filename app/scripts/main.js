@@ -1,4 +1,36 @@
-/* global ko, $, LastFMService, MapsService */
+/* global ko, $, MapsService */
+
+var Venue = function(venueData) {
+    'use strict';
+
+    this.name = venueData.name || '';
+
+    if (venueData.location) {
+        this.location = {
+            'latitude': venueData.location['geo:point']['geo:lat'],
+            'longitude': venueData.location['geo:point']['geo:long']
+        };
+    }
+
+    this.street = venueData.location.street;
+    this.city = venueData.location.city;
+    this.country = venueData.location.country;
+    this.postalcode = venueData.postalcode || '';
+    this.website = venueData.website || '';
+};
+
+var Event = function(eventData) {
+    'use strict';
+
+    this.title = eventData.title || '';
+    this.website = eventData.website || '';
+    this.date = eventData.startDate || '';
+    this.image = eventData.image[3]['#text'] || 'images/concert.jpg';
+
+    if (eventData.venue) {
+        this.venue = new Venue(eventData.venue);
+    }
+};
 
 var OnTheRoadVM = function() {
     'use strict';
@@ -8,8 +40,8 @@ var OnTheRoadVM = function() {
     self.xhr = undefined;
 
     self.eventList = ko.observableArray([]);
-    self.totalPages = ko.observable();
-    self.currentPage = ko.observable();
+    self.totalPages = ko.observable(0);
+    self.currentPage = ko.observable(0);
 
     self.searchText = ko.observable('Metallica').extend({
         rateLimit: {
@@ -17,6 +49,54 @@ var OnTheRoadVM = function() {
             timeout: 500
         }
     });
+
+
+    self.loadEventsFromLastFm = function(artist, pageToLoad) {
+        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=30&artist=@@artist@@&page=@@page@@';
+
+        // Clear previous results
+        if (!pageToLoad || pageToLoad === 1) {
+            self.eventList([]);
+            self.totalPages(0);
+            self.currentPage(0);
+        }
+
+        if (self.xhr) {
+            self.xhr.abort();
+        }
+
+        lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad);
+
+        self.xhr = $.ajax({
+            url: lastFmAPIURL,
+            success: function(serverData) {
+                if (!serverData.error) {
+                    if (serverData.events.event) {
+                        var results = serverData.events.event;
+                        var numResults = (serverData.events['@attr'] !== undefined) ? Math.min(serverData.events['@attr'].perPage, serverData.events['@attr'].total) : serverData.events.total;
+
+                        // The API DOES NOT return an array if there is only one result
+                        if (numResults === 1) {
+                            self.eventList.push(new Event(results));
+                            self.totalPages(1);
+                            self.currentPage(1);
+                        } else {
+                            for (var i = 0; i < results.length; i++) {
+                                self.eventList.push(new Event(results[i]));
+                            }
+                            self.totalPages(serverData.events['@attr'].totalPages);
+                            self.currentPage(serverData.events['@attr'].page);
+                        }
+                    }
+                } else {
+                    console.log(serverData.message);
+                }
+            },
+            error: function(e) {
+                console.log(e.message);
+            }
+        });
+    };
 
     self.filteredEventList = ko.computed(function() {
         return ko.utils.arrayFilter(self.eventList(), function(event) {
@@ -29,11 +109,11 @@ var OnTheRoadVM = function() {
         ko.utils.arrayForEach(self.filteredEventList(), function(event) {
             MapsService.getMarkers().push(MapsService.createMarker(event));
         });
-        console.log(MapsService.getMarkers());
+        MapsService.getMarkers();
     });
 
     self.searchEvents = ko.computed(function() {
-        LastFMService.loadEventsFromLastFm(self.searchText(), 1);
+        self.loadEventsFromLastFm(self.searchText(), 1);
     });
 
     self.isThereResults = function() {
@@ -46,17 +126,15 @@ var OnTheRoadVM = function() {
 
     self.loadNextPage = function() {
         if (self.currentPage() < self.totalPages()) {
-            LastFMService.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
+            selfs.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
         }
     };
-
-    MapsService.initializeMap(document.getElementById('map-canvas'));
-    MapsService.intializeInfoWindow();
 };
 
-// TODO Add to load or ready event
 $(function() {
     'use strict';
 
     ko.applyBindings(new OnTheRoadVM());
+    MapsService.initializeMap();
+    MapsService.initializeInfoWindow();
 });
