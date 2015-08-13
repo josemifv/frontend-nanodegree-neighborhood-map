@@ -40,11 +40,19 @@ var MapsService = new (function() {
         marker.setMap(map);
 
         google.maps.event.addListener(marker, 'click', function() {
+            self.bounceOnce(this);
             infoWindow.setContent(self.createInfoWindowContent(event));
             infoWindow.open(map, this);
         });
 
         return marker;
+    };
+
+    self.bounceOnce = function(marker) {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+            marker.setAnimation(null);
+        }, 1400);
     };
 
     self.createInfoWindowContent = function(event) {
@@ -64,6 +72,10 @@ var MapsService = new (function() {
         content += '</div>';
 
         return content.replace('@@name@@', event.title);
+    };
+
+    self.selectMarker = function(markerIndex) {
+        google.maps.event.trigger(markers[markerIndex], 'click');
     };
 
     self.initializeMap = function(mapCanvasId) {

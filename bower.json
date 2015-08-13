@@ -5,7 +5,8 @@
     "modernizr": "~2.8.1",
     "knockout": "~3.3.0",
     "material-design-lite": "~1.0.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "amplify": "~1.1.2"
   },
   "devDependencies": {
     "chai": "~3.0.0",

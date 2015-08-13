@@ -1,4 +1,24 @@
-/* global ko, $, MapsService */
+/* global amplify, ko, $, MapsService */
+
+// Simple client storage for view models with AmplifyJS and Knockout
+// https://craigcav.wordpress.com/2012/05/16/simple-client-storage-for-view-models-with-amplifyjs-and-knockout/
+ko.extenders.localStore = function(target, key) {
+    'use strict';
+
+    var value = amplify.store(key) || target();
+
+    var result = ko.computed({
+        read: target,
+        write: function(newValue) {
+            amplify.store(key, newValue);
+            target(newValue);
+        }
+    }).extend({ notify: 'always' });
+
+    result(value);
+
+    return result;
+};
 
 var Venue = function(venueData) {
     'use strict';
@@ -43,11 +63,12 @@ var OnTheRoadVM = function() {
     self.totalPages = ko.observable(0);
     self.currentPage = ko.observable(0);
 
-    self.searchText = ko.observable('Metallica').extend({
+    self.searchText = ko.observable().extend({
         rateLimit: {
             method: 'notifyWhenChangesStop',
             timeout: 500
-        }
+        },
+        localStore: 'OntheRoad-Search-Text'
     });
 
 
@@ -116,9 +137,9 @@ var OnTheRoadVM = function() {
         self.loadEventsFromLastFm(self.searchText(), 1);
     });
 
-    self.isThereResults = function() {
+    self.isThereResults = ko.computed(function() {
         return self.filteredEventList().length > 0;
-    };
+    });
 
     self.isLastPage = function() {
         return self.currentPage() === self.totalPages();
@@ -126,9 +147,18 @@ var OnTheRoadVM = function() {
 
     self.loadNextPage = function() {
         if (self.currentPage() < self.totalPages()) {
-            selfs.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
+            self.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
         }
     };
+
+    self.selectMarker = function(event) {
+        var markersIndex = ko.utils.arrayIndexOf(self.filteredEventList(), event);
+        MapsService.selectMarker(markersIndex);
+    };
+
+    self.persistData = ko.computed(function() {
+
+    });
 };
 
 $(function() {
@@ -137,4 +167,5 @@ $(function() {
     ko.applyBindings(new OnTheRoadVM());
     MapsService.initializeMap();
     MapsService.initializeInfoWindow();
+    $('#progress-bar').hide();
 });
