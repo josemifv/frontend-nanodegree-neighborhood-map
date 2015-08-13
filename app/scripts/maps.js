@@ -47,22 +47,20 @@ var MapsService = function() {
 
 
     self.createInfoWindowContent = function(event) {
-        var content = ' \
-          <div class="mdl-card mdl-shadow--2dp demo-card-square"> \
-            <div class="mdl-card__title mdl-card--expand"> \
-              <h2 class="mdl-card__title-text">@@name@@</h2> \
-            </div> \
-            <div class="mdl-card__supporting-text"> \
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. \
-              Aenan convallis. \
-            </div> \
-            <div class="mdl-card__actions mdl-card--border"> \
-              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"> \
-              View Updates \
-            </a> \
-          </div> \
-        </div> \
-      ';
+        var content = '<div class="mdl-card mdl-shadow--2dp demo-card-square">';
+        content += '<div class="mdl-card__title mdl-card--expand">';
+        content += '<h2 class="mdl-card__title-text">@@name@@</h2>';
+        content += '</div>';
+        content += '<div class="mdl-card__supporting-text">';
+        content += 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+        content += 'Aenan convallis.';
+        content += '</div>';
+        content += '<div class="mdl-card__actions mdl-card--border">';
+        content += '<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">';
+        content += 'View Updates';
+        content += '</a>';
+        content += '</div>';
+        content += '</div>';
 
         return content.replace('@@name@@', event.title);
     };

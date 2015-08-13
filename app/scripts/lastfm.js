@@ -1,5 +1,5 @@
-/* global $ */
-/* exported LastFMService */
+/* global $:true */
+/* export LastFMservice */
 
 var Venue = function(venueData) {
     'use strict';

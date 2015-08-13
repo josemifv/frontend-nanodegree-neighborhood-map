@@ -1,4 +1,4 @@
-/* global ko, LastFMService, MapsService */
+/* global ko, $, LastFMService, MapsService */
 
 var OnTheRoadVM = function() {
     'use strict';
@@ -56,5 +56,7 @@ var OnTheRoadVM = function() {
 
 // TODO Add to load or ready event
 $(function() {
+    'use strict';
+
     ko.applyBindings(new OnTheRoadVM());
 });
