@@ -50,7 +50,7 @@
             <div class="page-content">
                 <div id="map-container" class="mdl-grid">
                     <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
-                    <div id="results-list" class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--4-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
+                    <div id="results-list" class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--2-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
                         <div class="mdl-grid" data-bind="foreach: filteredEventList">
                             <div class="mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="event: { click: $parent.selectMarker }">
                                 <div class="mdl-card__title" data-bind="attr: { style: 'background: url(\'' + image + '\') center / cover' }">
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: currentPage() < totalPages()">
                             <button id="more" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" data-bind="{ click: loadNextPage, disable: currentPage() == totalPages() }">Show more results</button>
                         </div>
                     </div>
@@ -96,9 +96,9 @@
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
     <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/amplify/lib/amplify.min.js"></script>
     <script src="/bower_components/knockout/dist/knockout.js"></script>
     <script src="/bower_components/material-design-lite/material.min.js"></script>
+    <script src="/bower_components/amplify/lib/amplify.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js scripts/maps.js -->
