@@ -13,7 +13,9 @@ ko.extenders.localStore = function(target, key) {
             amplify.store(key, newValue);
             target(newValue);
         }
-    }).extend({ notify: 'always' });
+    }).extend({
+        notify: 'always'
+    });
 
     result(value);
 
@@ -52,12 +54,27 @@ var Event = function(eventData) {
     }
 };
 
+var Artist = function(artistData) {
+    'use strict';
+
+    this.name = artistData.name || '';
+    this.mbid = artistData.mbid || '';
+    this.ontour = artistData.ontour || '0';
+    this.image = artistData.image[2]['#text'] || 'images/concert.jpg';
+};
+
 var OnTheRoadVM = function() {
     'use strict';
 
     var self = this;
 
-    self.xhr = undefined;
+    self.xhrArtist = undefined;
+    self.xhrEvents = undefined;
+    self.xhrPlaces = undefined;
+
+    self.currentArtist = ko.observable().extend({
+        localStore: 'OntheRoad-Current-Artist'
+    });
 
     self.eventList = ko.observableArray([]);
     self.totalPages = ko.observable(0);
@@ -82,13 +99,13 @@ var OnTheRoadVM = function() {
             self.currentPage(0);
         }
 
-        if (self.xhr) {
-            self.xhr.abort();
+        if (self.xhrEvents) {
+            self.xhrEvents.abort();
         }
 
         lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad);
 
-        self.xhr = $.ajax({
+        self.xhrEvents = $.ajax({
             url: lastFmAPIURL,
             success: function(serverData) {
                 if (!serverData.error) {
@@ -115,11 +132,46 @@ var OnTheRoadVM = function() {
             },
             error: function(e) {
                 console.log(e.message);
+            },
+            fail: function(e) {
+                console.log(e.message);
             }
         });
     };
 
-    self.filteredEventList = ko.computed(function() {
+    self.getArtistInfoFromLastFm = function(artist) {
+        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&artist=@@artist@@';
+
+        lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist);
+
+        if (self.xhrArtist) {
+            self.xhrArtist.abort();
+        }
+
+        self.xhrArtist = $.ajax({
+            url: lastFmAPIURL,
+            success: function(serverData) {
+                if (!serverData.error) {
+                    if (serverData.artist && serverData.artist.name !== 'Undefined') {
+                        console.log(serverData);
+                        self.currentArtist(new Artist(serverData.artist));
+                    } else {
+                        self.currentArtist(null);
+                    }
+                } else {
+                    console.log(serverData.message);
+                }
+            },
+            error: function(e) {
+                console.log(e.message);
+            },
+            fail: function(e) {
+                console.log(e.message);
+            }
+        });
+    };
+
+    self.filteredEventList = ko.computed(function(filter) {
         return ko.utils.arrayFilter(self.eventList(), function(event) {
             return true;
         });
@@ -134,7 +186,10 @@ var OnTheRoadVM = function() {
     });
 
     self.searchEvents = ko.computed(function() {
-        self.loadEventsFromLastFm(self.searchText(), 1);
+        if (self.searchText() !== '') {
+            self.loadEventsFromLastFm(self.searchText(), 1);
+            self.getArtistInfoFromLastFm(self.searchText());
+        }
     });
 
     self.isThereResults = ko.computed(function() {
