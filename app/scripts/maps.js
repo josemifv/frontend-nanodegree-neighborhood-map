@@ -40,13 +40,26 @@ var MapsService = new(function() {
         marker.setMap(map);
 
         google.maps.event.addListener(marker, 'click', function() {
-            map.setCenter(marker.getPosition());
             self.bounceOnce(this);
             infoWindow.setContent(self.createInfoWindowContent(event));
             infoWindow.open(map, this);
         });
 
         return marker;
+    };
+
+    self.fitBounds = function() {
+        // Source --> http://stackoverflow.com/questions/15299113/google-maps-v3-fitbounds-on-visible-markers
+        var bounds = new google.maps.LatLngBounds();
+
+        if (markers.length > 0) {
+            for (var i = 0; i < markers.length; i++) {
+                if (markers[i].getVisible()) {
+                    bounds.extend(markers[i].getPosition());
+                }
+            }
+            map.fitBounds(bounds);
+        }
     };
 
     self.bounceOnce = function(marker) {
@@ -69,6 +82,11 @@ var MapsService = new(function() {
         content += '<span>@@venueCity@@, @@venueCountry@@</span>';
         content += '<br/>';
         content += '<span>@@attendance@@ going</span>';
+        content += '</div>';
+        content += '<div class="mdl-card__menu">';
+        content += '<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="MapsService.getInfoWindow().close()">';
+        content += '<i class="material-icons">clear</i>';
+        content += '</button>';
         content += '</div>';
         content += '</div>';
 
@@ -137,7 +155,9 @@ var MapsService = new(function() {
             });
 
             var iwCloseBtn = iwOuter.next();
-            iwCloseBtn.css({'display':'none'});
+            iwCloseBtn.css({
+                'display': 'none'
+            });
         });
     };
 })();

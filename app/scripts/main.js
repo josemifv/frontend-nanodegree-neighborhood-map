@@ -198,7 +198,7 @@ var OnTheRoadVM = function() {
         ko.utils.arrayForEach(self.filteredEventList(), function(event) {
             MapsService.getMarkers().push(MapsService.createMarker(event));
         });
-        MapsService.getMarkers();
+        MapsService.fitBounds();
     });
 
     self.searchEvents = ko.computed(function() {
