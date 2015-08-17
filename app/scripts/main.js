@@ -52,6 +52,8 @@ var Event = function(eventData) {
     if (eventData.venue) {
         this.venue = new Venue(eventData.venue);
     }
+
+    this.attendance = parseInt(eventData.attendance || 0);
 };
 
 var Artist = function(artistData) {
@@ -61,6 +63,7 @@ var Artist = function(artistData) {
     this.mbid = artistData.mbid || '';
     this.ontour = artistData.ontour || '0';
     this.image = artistData.image[2]['#text'] || 'images/concert.jpg';
+    this.bio = artistData.bio.summary || '';
 };
 
 var OnTheRoadVM = function() {
@@ -88,6 +91,7 @@ var OnTheRoadVM = function() {
         localStore: 'OntheRoad-Search-Text'
     });
 
+    self.dateFilter = ko.observable('all');
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
         var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=30&artist=@@artist@@&page=@@page@@';
@@ -153,10 +157,9 @@ var OnTheRoadVM = function() {
             success: function(serverData) {
                 if (!serverData.error) {
                     if (serverData.artist && serverData.artist.name !== 'Undefined') {
-                        console.log(serverData);
                         self.currentArtist(new Artist(serverData.artist));
                     } else {
-                        self.currentArtist(null);
+                        self.currentArtist(new Artist(null));
                     }
                 } else {
                     console.log(serverData.message);
@@ -171,9 +174,20 @@ var OnTheRoadVM = function() {
         });
     };
 
-    self.filteredEventList = ko.computed(function(filter) {
+    self.filteredEventList = ko.computed(function() {
         return ko.utils.arrayFilter(self.eventList(), function(event) {
-            return true;
+            var now = new Date();
+            var eventDate = new Date(event.date);
+            switch (self.dateFilter()) {
+                case 'today':
+                    return (eventDate.getDay() === now.getDay());
+                case 'month':
+                    return (eventDate.getMonth() === now.getMonth());
+                case 'year':
+                    return (eventDate.getFullYear() === now.getFullYear());
+                default:
+                    return true;
+            }
         });
     });
 

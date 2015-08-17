@@ -19,16 +19,30 @@ body {
     margin-right: 32px;
 }
 
-.mdl-card__title {
-    height: 176px;
-    color: #FFF;
-    background: #3E4EB8;
+.mdl-navigation__link .material-icons {
+    margin-right: 16px;
+    vertical-align: bottom;
 }
 
 .page-content {
     width: 100%;
     height: inherit;
 }
+
+.gm-style-iw {
+    width: 350px !important;
+    top: 0 !important;
+    left: 0 !important;
+    border-radius: 2px 2px 0 0;
+}
+
+.mdl-card__title {
+    height: 176px;
+    color: #FFF;
+    background: #3E4EB8;
+}
+
+.mdl-
 
 #progress-bar {
     width: 100%;
@@ -61,9 +75,6 @@ body {
     width: 100%;
 }
 
-.gm-style-iw {
-    width: 350px !important;
-    top: 0 !important;
-    left: 0 !important;
-    border-radius: 2px 2px 0 0;
+#artist-info {
+    width: 100%;
 }

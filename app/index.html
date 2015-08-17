@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="/bower_components/material-design-lite/material.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -45,14 +45,33 @@
             </div>
         </header>
         <div class="mdl-layout__drawer">
-            <div class="artist-info">
-                <div class="mdl-card" data-bind="with: currentArtist">
-                    <div class="mdl-card__title">
-                        <h2 class="mdl-card__title-text" data-bind="text: name"></h2>
-                    </div>
+            <span class="mdl-layout-title" data-bind="text: currentArtist().name"></span>
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-0">
+                        <input type="radio" id="option-0" class="mdl-radio__button" name="options" value="all" data-bind="checked: dateFilter" />
+                        <span class="mdl-radio__label">All gigs</span>
+                    </label>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-1">
+                        <input type="radio" id="option-1" class="mdl-radio__button" name="options" value="today" data-bind="checked: dateFilter" />
+                        <span class="mdl-radio__label">Today's gigs</span>
+                    </label>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-2">
+                        <input type="radio" id="option-2" class="mdl-radio__button" name="options" value="month" data-bind="checked: dateFilter" />
+                        <span class="mdl-radio__label">This month's gigs</span>
+                    </label>
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-3">
+                        <input type="radio" id="option-3" class="mdl-radio__button" name="options" value="year" data-bind="checked: dateFilter" />
+                        <span class="mdl-radio__label">This year's gigs</span>
+                    </label>
                 </div>
             </div>
-            <div class="mdl-layout-spacer"></div>
         </div>
         <div id="progress-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
         <main class="mdl-layout__content mdl-color--grey-100">
@@ -70,7 +89,7 @@
                                 </div>
                                 <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
                                     <div>
-                                        <strong data-bind="text: date"></strong>
+                                        <strong data-bind="text: moment(date).format('LL')"></strong>
                                     </div>
                                 </div>
                             </div>
@@ -108,6 +127,7 @@
     <script src="/bower_components/knockout/dist/knockout.js"></script>
     <script src="/bower_components/material-design-lite/material.min.js"></script>
     <script src="/bower_components/amplify/lib/amplify.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js scripts/maps.js -->
