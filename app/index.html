@@ -45,7 +45,9 @@
             </div>
         </header>
         <div class="mdl-layout__drawer">
-            <span class="mdl-layout-title" data-bind="text: currentArtist().name"></span>
+            <header data-bind="if: isThereArtist">
+                <span class="mdl-layout-title" data-bind="text: currentArtist().name"></span>
+            </header>
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-0">
@@ -78,19 +80,19 @@
             <div class="page-content">
                 <div id="map-container" class="mdl-grid">
                     <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
-                    <div id="results-list" class="mdl-cell mdl-cell--2-col mdl-cell--3-col-tablet mdl-cell--2-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
+                    <div id="results-list" class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--2-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
                         <div class="mdl-grid" data-bind="foreach: filteredEventList">
                             <div class="mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="event: { click: $parent.selectMarker }">
                                 <div class="mdl-card__title" data-bind="attr: { style: 'background: url(\'' + image + '\') center / cover' }">
                                     <h2 class="mdl-card__title-text" data-bind="text: title"></h2>
                                 </div>
-                                <div class="mdl-color-text--grey-600 mdl-card__supporting-text">
+                                <div class="mdl-card__supporting-text">
+                                    <strong data-bind="text: venue.name"></strong>
+                                    <br/>
                                     <span data-bind="text: venue.city"></span>, <span data-bind="text: venue.country"></span>
-                                </div>
-                                <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                                    <div>
-                                        <strong data-bind="text: moment(date).format('LL')"></strong>
-                                    </div>
+                                    <br/>
+                                    <br/>
+                                    <span data-bind="text: moment(date).format('LL')"></span>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +103,6 @@
                 </div>
             </div>
         </main>
-    </div>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>

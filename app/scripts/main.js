@@ -158,8 +158,6 @@ var OnTheRoadVM = function() {
                 if (!serverData.error) {
                     if (serverData.artist && serverData.artist.name !== 'Undefined') {
                         self.currentArtist(new Artist(serverData.artist));
-                    } else {
-                        self.currentArtist(new Artist(null));
                     }
                 } else {
                     console.log(serverData.message);
@@ -173,6 +171,10 @@ var OnTheRoadVM = function() {
             }
         });
     };
+
+    self.isThereArtist = ko.computed(function() {
+      return self.currentArtist() instanceof Artist;
+    });
 
     self.filteredEventList = ko.computed(function() {
         return ko.utils.arrayFilter(self.eventList(), function(event) {

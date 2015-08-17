@@ -2,7 +2,7 @@
 /* global google */
 /* exported MapsService */
 
-var MapsService = new (function() {
+var MapsService = new(function() {
     'use strict';
 
     var self = this;
@@ -56,22 +56,28 @@ var MapsService = new (function() {
     };
 
     self.createInfoWindowContent = function(event) {
-        var content = '<div class="mdl-card mdl-shadow--2dp demo-card-square">';
-        content += '<div class="mdl-card__title mdl-card--expand">';
+        var content = '<div class="mdl-card mdl_shadow--2dp">';
+        content += '<div class="mdl-card__title" style="background: url(@@eventImage@@) center / cover">';
         content += '<h2 class="mdl-card__title-text">@@name@@</h2>';
         content += '</div>';
         content += '<div class="mdl-card__supporting-text">';
-        content += 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-        content += 'Aenan convallis.';
-        content += '</div>';
-        content += '<div class="mdl-card__actions mdl-card--border">';
-        content += '<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">';
-        content += 'View Updates';
-        content += '</a>';
+        content += '<span>@@artistsList@@</span>';
+        content += '<br/>';
+        content += '<span>@@venueName@@</span>';
+        content += '<br/>';
+        content += '<span>@@venueCity@@, @@venueCountry@@</span>';
+        content += '<br/>';
+        content += '<span>@@attendance@@ going</span>';
         content += '</div>';
         content += '</div>';
 
-        return content.replace('@@name@@', event.title);
+        content = content.replace('@@name@@', event.title);
+        content = content.replace('@@eventImage@@', event.image);
+        content = content.replace('@@attendance@@', event.attendance);
+        content = content.replace('@@venueName@@', event.venue.name);
+        content = content.replace('@@venueCity@@', event.venue.city);
+        content = content.replace('@@venueCountry@@', event.venue.country);
+        return content;
     };
 
     self.selectMarker = function(markerIndex) {
@@ -99,5 +105,38 @@ var MapsService = new (function() {
     self.initializeInfoWindow = function() {
         // Initialize the InfoWindow
         infoWindow = new google.maps.InfoWindow();
+
+        google.maps.event.addListener(infoWindow, 'domready', function() {
+            var iwOuter = $('.gm-style-iw');
+
+            var iwBackground = iwOuter.prev();
+
+            iwBackground.children(':nth-child(2)').css({
+                'display': 'none'
+            });
+            iwBackground.children(':nth-child(4)').css({
+                'display': 'none'
+            });
+
+            iwBackground.children(':nth-child(1)').attr('style', function(i, s) {
+                return s + 'left: 76px !important;'
+            });
+
+            iwBackground.children(':nth-child(3)').attr('style', function(i, s) {
+                return s + 'left: 76px !important;'
+            });
+
+            iwBackground.children(':nth-child(3)').find('div').children().css({
+                'box-shadow': 'rgba(72, 181, 233, 0.6) 0px 1px 6px',
+                'z-index': '1'
+            });
+
+            iwBackground.children(':nth-child(3)').attr('style', function(i, s) {
+                return s + 'margin: 0px; padding: 0px;'
+            });
+
+            var iwCloseBtn = iwOuter.next();
+            iwCloseBtn.css({'display':'none'});
+        });
     };
 })();

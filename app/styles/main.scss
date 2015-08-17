@@ -1,9 +1,8 @@
 // bower:scss
 // endbower
 //
-$font-stack: 'Roboto',
-'Helvetica',
-'sans-serif';
+$font-stack: 'Roboto', 'Helvetica', 'sans-serif';
+
 .browserupgrade {
     margin: 0.2em 0;
     background: #ccc;
@@ -29,20 +28,11 @@ body {
     height: inherit;
 }
 
-.gm-style-iw {
-    width: 350px !important;
-    top: 0 !important;
-    left: 0 !important;
-    border-radius: 2px 2px 0 0;
-}
-
 .mdl-card__title {
     height: 176px;
     color: #FFF;
     background: #3E4EB8;
 }
-
-.mdl-
 
 #progress-bar {
     width: 100%;
@@ -77,4 +67,29 @@ body {
 
 #artist-info {
     width: 100%;
+}
+
+.gm-style-iw {
+   width: 350px !important;
+   top: 20px !important;
+   left: 0 !important;
+   border-radius: 2px 2px 0 0;
+   background-color: #fff;
+}
+
+
+.gm-style-iw > div {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+.gm-style-iw > div > div {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+.gm-style-iw mdl-card {
+  width: 350px !important;
 }
