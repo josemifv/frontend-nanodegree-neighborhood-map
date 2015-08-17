@@ -158,6 +158,7 @@ var OnTheRoadVM = function() {
                 if (!serverData.error) {
                     if (serverData.artist && serverData.artist.name !== 'Undefined') {
                         self.currentArtist(new Artist(serverData.artist));
+                        self.searchText(serverData.artist.name);
                     }
                 } else {
                     console.log(serverData.message);
@@ -173,7 +174,7 @@ var OnTheRoadVM = function() {
     };
 
     self.isThereArtist = ko.computed(function() {
-      return self.currentArtist() instanceof Artist;
+        return self.currentArtist() instanceof Artist;
     });
 
     self.filteredEventList = ko.computed(function() {
@@ -208,10 +209,6 @@ var OnTheRoadVM = function() {
         }
     });
 
-    self.isThereResults = ko.computed(function() {
-        return self.filteredEventList().length > 0;
-    });
-
     self.isLastPage = function() {
         return self.currentPage() === self.totalPages();
     };
@@ -227,8 +224,14 @@ var OnTheRoadVM = function() {
         MapsService.selectMarker(markersIndex);
     };
 
-    self.persistData = ko.computed(function() {
+    self.showResultList = ko.observable(true);
 
+    self.updateResultList = ko.computed(function() {
+        if (self.showResultList()) {
+            $('#results-list').show();
+        } else {
+            $('#results-list').hide();
+        }
     });
 };
 

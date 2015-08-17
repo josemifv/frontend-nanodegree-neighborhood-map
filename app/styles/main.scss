@@ -18,14 +18,14 @@ body {
     margin-right: 32px;
 }
 
-.mdl-navigation__link .material-icons {
-    margin-right: 16px;
-    vertical-align: bottom;
-}
-
 .page-content {
     width: 100%;
     height: inherit;
+}
+
+.mdl-card {
+    position: relative;
+    width: 100%;
 }
 
 .mdl-card__title {
@@ -42,9 +42,22 @@ body {
     padding: 16px;
 }
 
-.mdl-card {
-    position: relative;
-    width: 100%;
+.mdl-card__menu {
+    color: #fff;
+}
+
+.mdl-layout__drawer header {
+    min-height: 180px;
+    color: #FFF;
+    background: #3E4EB8;
+}
+
+.mdl-layout__drawer .mdl-layout-title {
+  position: relative;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  height: inherit;
 }
 
 #progress-bar {
@@ -78,10 +91,6 @@ body {
     width: 100%;
 }
 
-#artist-info {
-    width: 100%;
-}
-
 .gm-style-iw {
     width: 350px !important;
     top: 20px !important;
@@ -99,8 +108,4 @@ body {
     width: 100%;
     margin: 0px;
     padding: 0px;
-}
-
-.mdl-card__menu {
-    color: #fff;
 }
