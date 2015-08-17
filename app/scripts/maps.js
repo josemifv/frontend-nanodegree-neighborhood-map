@@ -40,6 +40,7 @@ var MapsService = new(function() {
         marker.setMap(map);
 
         google.maps.event.addListener(marker, 'click', function() {
+            map.setCenter(marker.getPosition());
             self.bounceOnce(this);
             infoWindow.setContent(self.createInfoWindowContent(event));
             infoWindow.open(map, this);
@@ -56,7 +57,7 @@ var MapsService = new(function() {
     };
 
     self.createInfoWindowContent = function(event) {
-        var content = '<div class="mdl-card mdl_shadow--2dp">';
+        var content = '<div class="mdl-card">';
         content += '<div class="mdl-card__title" style="background: url(@@eventImage@@) center / cover">';
         content += '<h2 class="mdl-card__title-text">@@name@@</h2>';
         content += '</div>';

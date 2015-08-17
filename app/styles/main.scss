@@ -32,6 +32,19 @@ body {
     height: 176px;
     color: #FFF;
     background: #3E4EB8;
+    margin: 0px;
+    padding: 0px;
+}
+
+.mdl-card__title-text {
+  background-color: rgba(62, 78, 184, 0.3);
+  width: 100%;
+  padding: 16px;
+}
+
+.mdl-card {
+  position: relative;
+  width: 100%;
 }
 
 #progress-bar {
@@ -88,8 +101,4 @@ body {
   width: 100%;
   margin: 0px;
   padding: 0px;
-}
-
-.gm-style-iw mdl-card {
-  width: 350px !important;
 }
