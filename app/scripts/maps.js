@@ -1,8 +1,8 @@
 /* jshint multistr: true */
-/* global google */
+/* global $, google */
 /* exported MapsService */
 
-var MapsService = new(function() {
+var MapsService = new (function() {
     'use strict';
 
     var self = this;
@@ -82,6 +82,7 @@ var MapsService = new(function() {
         content += '<span>@@venueCity@@, @@venueCountry@@</span>';
         content += '<br/>';
         content += '<span>@@attendance@@ going</span>';
+        content += '<span class="pull-right">Powered by <a target="_blank" href="http://www.last.fm">Last.fm</a></span>';
         content += '</div>';
         content += '<div class="mdl-card__menu">';
         content += '<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="MapsService.getInfoWindow().close()">';
@@ -89,7 +90,6 @@ var MapsService = new(function() {
         content += '</button>';
         content += '</div>';
         content += '</div>';
-        // http://www.last.fm/static/images/logo_mobile_beta.png
 
         content = content.replace('@@name@@', event.title);
         content = content.replace('@@eventImage@@', event.image);
