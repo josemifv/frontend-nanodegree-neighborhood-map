@@ -1,2 +1,42 @@
-# frontend-nanodegree-neighborhood-map
-Project 5 - Front-End Web Developer Nanodegree (Neighborhood Map)
+## Project 5 - Front-End Web Developer Nanodegree (Neighborhood Map)
+This project contains the source code of the implementation of the Fifth project assigment from Udacity's Front-end Web Developer Nanodegree: Neighborhood map.
+
+The project consists of developing a single-page application featuring a map of your neighborhood or a neighborhood you would like to visit. You will then add additional functionality to this application, including: map markers to identify popular locations or places you’d like to visit, a search function to easily discover these locations, and a listview to support simple browsing of all locations. You will then research and implement third-party APIs that provide additional information about each of these locations (such as StreetView images, Wikipedia articles, Yelp reviews, etc).
+
+
+In this case, the web app allows to check if an artist or band is on tour. It is powered by [Last.fm's Developer API](http://www.last.fm/api).
+
+The repository includes the following files:
+* **app directory**: It contains the source code of the web app.
+* **dist directory**: It contains the all files for the distribution of the app. It is generated automatically by the automation tool [GulpJS](http://gulpjs.com/).
+* **test directory**: It contains the tests implemented for the app (Currently empty).
+* **.bowerrc**: Config file used by the package manager [Bower](http://bower.io/).
+* **.gitattributes**: Config file used by [Git](http://www.git-scm.com).
+* **.gitignore**: Config file used by [Git](http://www.git-scm.com). It contains the excluded files and directories ignored by Git.
+* **.yo-rc.json**: Config file to saved the configuration used by [Yeoman](http://www.yeoman.io).
+* **README.md**: The GitHub readme file.
+* **.bower.json**: Manifest file used by Bower. It contains all Bower package dependencies used by the project.
+* **gulpfile.bable.js**: Automation script used by GulpJS. It contains tasks such as _clean_, _build_ or _deploy_.
+* **package.json**: Manifest file used by [NPM](http://www.npmjs.com/) package manager.
+
+### Building the application from the source
+TODO
+
+### Running the application
+Just visit the following [link](http://josemifv.github.io/frontend-nanodegree-neighborhood-map/).
+
+To running it in a development environment, just run the following command: `gulp serve`. A browser window will be opened and the application will be loaded.
+
+
+### Resources used to complete this project
+TODO
+
+
+
+
+
+
+
+
+
+
