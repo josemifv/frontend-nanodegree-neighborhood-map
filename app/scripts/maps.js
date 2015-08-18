@@ -140,11 +140,11 @@ var MapsService = new (function() {
             });
 
             iwBackground.children(':nth-child(1)').attr('style', function(i, s) {
-                return s + 'left: 76px !important;'
+                return s + 'left: 76px !important;';
             });
 
             iwBackground.children(':nth-child(3)').attr('style', function(i, s) {
-                return s + 'left: 76px !important;'
+                return s + 'left: 76px !important;';
             });
 
             iwBackground.children(':nth-child(3)').find('div').children().css({
@@ -153,7 +153,7 @@ var MapsService = new (function() {
             });
 
             iwBackground.children(':nth-child(3)').attr('style', function(i, s) {
-                return s + 'margin: 0px; padding: 0px;'
+                return s + 'margin: 0px; padding: 0px;';
             });
 
             var iwCloseBtn = iwOuter.next();
