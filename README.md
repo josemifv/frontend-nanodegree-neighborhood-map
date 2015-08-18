@@ -29,7 +29,14 @@ To running it in a development environment, just run the following command: `gul
 
 
 ### Resources used to complete this project
-TODO
+* [Udacity's Intro to AJAX course](https://www.udacity.com/course/intro-to-ajax--ud110).
+* [Udacity's JavaScript Design Patterns course](https://www.udacity.com/course/javascript-design-patterns--ud989).
+* [Google Maps v3 API Reference website](https://developers.google.com/maps/documentation/javascript/reference).
+* [StackOverflow website](http://stackoverflow.com/).
+* [5 ways to customize Google Maps InfoWindow](http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html).
+* [Yeoman's Gulp Webapp generator](https://github.com/yeoman/generator-gulp-webapp).
+* [GulpJS](http://gulpjs.com/), [Yeoman](http://www.yeoman.io) and [Bower](http://bower.io/) official documentation.
+* and many more...
 
 
 
