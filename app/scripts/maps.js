@@ -75,7 +75,7 @@ var MapsService = new(function() {
         content += '<h2 class="mdl-card__title-text">@@name@@</h2>';
         content += '</div>';
         content += '<div class="mdl-card__supporting-text">';
-        content += '<span>@@artistsList@@</span>';
+        content += '<strong>Headliner: @@eventHeadliner@@</strong>';
         content += '<br/>';
         content += '<span>@@venueName@@</span>';
         content += '<br/>';
@@ -89,9 +89,11 @@ var MapsService = new(function() {
         content += '</button>';
         content += '</div>';
         content += '</div>';
+        // http://www.last.fm/static/images/logo_mobile_beta.png
 
         content = content.replace('@@name@@', event.title);
         content = content.replace('@@eventImage@@', event.image);
+        content = content.replace('@@eventHeadliner@@', event.headliner);
         content = content.replace('@@attendance@@', event.attendance);
         content = content.replace('@@venueName@@', event.venue.name);
         content = content.replace('@@venueCity@@', event.venue.city);

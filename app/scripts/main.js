@@ -54,6 +54,8 @@ var Event = function(eventData) {
     }
 
     this.attendance = parseInt(eventData.attendance || 0);
+
+    this.headliner = eventData.artists.headliner || [];
 };
 
 var Artist = function(artistData) {
@@ -94,53 +96,57 @@ var OnTheRoadVM = function() {
     self.dateFilter = ko.observable('all');
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
-        var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=30&artist=@@artist@@&page=@@page@@';
-
-        // Clear previous results
-        if (!pageToLoad || pageToLoad === 1) {
-            self.eventList([]);
-            self.totalPages(0);
-            self.currentPage(0);
-        }
-
-        if (self.xhrEvents) {
-            self.xhrEvents.abort();
-        }
-
-        lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad);
-
-        self.xhrEvents = $.ajax({
-            url: lastFmAPIURL,
-            success: function(serverData) {
-                if (!serverData.error) {
-                    if (serverData.events.event) {
-                        var results = serverData.events.event;
-                        var numResults = (serverData.events['@attr'] !== undefined) ? Math.min(serverData.events['@attr'].perPage, serverData.events['@attr'].total) : serverData.events.total;
-
-                        // The API DOES NOT return an array if there is only one result
-                        if (numResults === 1) {
-                            self.eventList.push(new Event(results));
-                            self.totalPages(1);
-                            self.currentPage(1);
-                        } else {
-                            for (var i = 0; i < results.length; i++) {
-                                self.eventList.push(new Event(results[i]));
-                            }
-                            self.totalPages(serverData.events['@attr'].totalPages);
-                            self.currentPage(serverData.events['@attr'].page);
-                        }
-                    }
-                } else {
-                    console.log(serverData.message);
-                }
-            },
-            error: function(e) {
-                console.log(e.message);
-            },
-            fail: function(e) {
-                console.log(e.message);
+        if (artist) {
+            if (self.xhrEvents) {
+                self.xhrEvents.abort();
             }
-        });
+
+            // Clear previous results
+            if (!pageToLoad || pageToLoad === 1) {
+                self.eventList([]);
+                self.totalPages(0);
+                self.currentPage(0);
+            }
+
+            var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&limit=30&artist=@@artist@@&page=@@page@@';
+
+            lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad || '1');
+
+            self.xhrEvents = $.ajax({
+                url: lastFmAPIURL,
+                success: function(serverData) {
+                    if (!serverData.error) {
+                        if (serverData.events.event) {
+                            var results = serverData.events.event;
+                            var numResults = (serverData.events['@attr'] !== undefined) ? Math.min(serverData.events['@attr'].perPage, serverData.events['@attr'].total) : serverData.events.total;
+
+                            console.log(results);
+
+                            // The API DOES NOT return an array if there is only one result
+                            if (numResults === 1) {
+                                self.eventList.push(new Event(results));
+                                self.totalPages(1);
+                                self.currentPage(1);
+                            } else {
+                                for (var i = 0; i < results.length; i++) {
+                                    self.eventList.push(new Event(results[i]));
+                                }
+                                self.totalPages(serverData.events['@attr'].totalPages);
+                                self.currentPage(serverData.events['@attr'].page);
+                            }
+                        }
+                    } else {
+                        console.log(serverData.message);
+                    }
+                },
+                error: function(e) {
+                    console.log(e.message);
+                },
+                fail: function(e) {
+                    console.log(e.message);
+                }
+            });
+        }
     };
 
     self.getArtistInfoFromLastFm = function(artist) {
@@ -148,29 +154,32 @@ var OnTheRoadVM = function() {
 
         lastFmAPIURL = lastFmAPIURL.replace('@@artist@@', artist);
 
-        if (self.xhrArtist) {
-            self.xhrArtist.abort();
-        }
-
-        self.xhrArtist = $.ajax({
-            url: lastFmAPIURL,
-            success: function(serverData) {
-                if (!serverData.error) {
-                    if (serverData.artist && serverData.artist.name !== 'Undefined') {
-                        self.currentArtist(new Artist(serverData.artist));
-                        self.searchText(serverData.artist.name);
-                    }
-                } else {
-                    console.log(serverData.message);
-                }
-            },
-            error: function(e) {
-                console.log(e.message);
-            },
-            fail: function(e) {
-                console.log(e.message);
+        if (artist) {
+            if (self.xhrArtist) {
+                // Cancel previous call
+                self.xhrArtist.abort();
             }
-        });
+
+            self.xhrArtist = $.ajax({
+                url: lastFmAPIURL,
+                success: function(serverData) {
+                    if (!serverData.error) {
+                        if (serverData.artist && serverData.artist.name !== 'Undefined') {
+                            self.currentArtist(new Artist(serverData.artist));
+                            self.searchText(serverData.artist.name);
+                        }
+                    } else {
+                        console.log(serverData.message);
+                    }
+                },
+                error: function(e) {
+                    console.log(e.message);
+                },
+                fail: function(e) {
+                    console.log(e.message);
+                }
+            });
+        }
     };
 
     self.isThereArtist = ko.computed(function() {
