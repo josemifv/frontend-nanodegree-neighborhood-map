@@ -50,6 +50,8 @@
             </header>
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+                </div>
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-0">
                         <input type="radio" id="option-0" class="mdl-radio__button" name="options" value="all" data-bind="checked: dateFilter" />
                         <span class="mdl-radio__label">All gigs</span>
@@ -74,13 +76,13 @@
                     </label>
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: filteredEventList().length > 0">
-                    <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
-                        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" data-bind="checked: showResultList" />
-                        <span class="mdl-checkbox__label">Show result list</span>
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+                        <input type="checkbox" id="switch-1" class="mdl-switch__input" data-bind="checked: showResultList" />
+                        <span class="mdl-switch__label">Show result list</span>
                     </label>
                 </div>
+                <div class="mdl-layout-spacer"></div>
             </div>
-            <div class="mdl-layout-spacer"></div>
         </div>
         <div id="progress-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
         <main class="mdl-layout__content mdl-color--grey-100">
