@@ -93,6 +93,10 @@ var OnTheRoadVM = function() {
         localStore: 'OntheRoad-Search-Text'
     });
 
+    self.searchText.subscribe(function() {
+      self.searchEvents();
+    });
+
     self.dateFilter = ko.observable('all');
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
@@ -140,11 +144,11 @@ var OnTheRoadVM = function() {
                     }
                 },
                 error: function(e) {
-                    console.log(e.message);
+                    console.log(e.message || e.statusText);
                     document.querySelector('#toastAPIError').show();
                 },
                 fail: function(e) {
-                    console.log(e.message);
+                    console.log(e.message || e.statusText);
                     document.querySelector('#toastAPIError').show();
                 }
             });
@@ -175,10 +179,10 @@ var OnTheRoadVM = function() {
                     }
                 },
                 error: function(e) {
-                    console.log(e.message);
+                    console.log(e.message || e.statusText);
                 },
                 fail: function(e) {
-                    console.log(e.message);
+                    console.log(e.message || e.statusText);
                 }
             });
         }
@@ -213,12 +217,12 @@ var OnTheRoadVM = function() {
         MapsService.fitBounds();
     });
 
-    self.searchEvents = ko.computed(function() {
+    self.searchEvents = function() {
         if (self.searchText() !== '') {
             self.loadEventsFromLastFm(self.searchText(), 1);
             self.getArtistInfoFromLastFm(self.searchText());
         }
-    });
+    };
 
     self.isLastPage = function() {
         return self.currentPage() === self.totalPages();

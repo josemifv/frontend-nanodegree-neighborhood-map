@@ -39,7 +39,7 @@
                         <i class="material-icons">search</i>
                     </label>
                     <div class="mdl-textfield__expandable-holder">
-                        <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp" data-bind="{ text: searchText, textInput: searchText }" />
+                        <input class="mdl-textfield__input" type="text" name="sample" id="fixed-header-drawer-exp" data-bind="{ textInput: searchText }" />
                     </div>
                 </div>
             </div>
@@ -111,11 +111,11 @@
                     </div>
                 </div>
             </div>
-            <paper-toast id="toastAPIError" role="alert" text="Error retrieving results">
-                <div style="color: #eeff41;" onclick="console.log('RETRY')">Retry</div>
-            </paper-toast>
         </main>
     </div>
+    <paper-toast id="toastAPIError" role="alert" text="Error retrieving results">
+        <div style="color: #eeff41;" data-bind="click: searchEvents">Retry</div>
+    </paper-toast>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
     (function(b, o, i, l, e, r) {
