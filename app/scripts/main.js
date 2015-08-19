@@ -22,50 +22,48 @@ ko.extenders.localStore = function(target, key) {
     return result;
 };
 
-var Venue = function(venueData) {
+var Venue = function(name, location, street, city, country, postalcode, website) {
     'use strict';
 
-    this.name = venueData.name || '';
+    this.name = name || '';
 
-    if (venueData.location) {
-        this.location = {
-            'latitude': venueData.location['geo:point']['geo:lat'],
-            'longitude': venueData.location['geo:point']['geo:long']
-        };
-    }
+    this.location = {
+        latitude: location.latitude,
+        longitude: location.longitude
+    };
 
-    this.street = venueData.location.street;
-    this.city = venueData.location.city;
-    this.country = venueData.location.country;
-    this.postalcode = venueData.postalcode || '';
-    this.website = venueData.website || '';
+    this.street = street;
+    this.city = city;
+    this.country = country;
+    this.postalcode = postalcode || '';
+    this.website = website || '';
 };
 
-var Event = function(eventData) {
+var Event = function(title, website, date, image, venue, attendance, headliner) {
     'use strict';
 
-    this.title = eventData.title || '';
-    this.website = eventData.website || '';
-    this.date = eventData.startDate || '';
-    this.image = eventData.image[3]['#text'] || 'images/concert.jpg';
+    this.title = title || '';
+    this.website = website || '';
+    this.date = date || '';
+    this.image = image || 'images/concert.jpg';
 
-    if (eventData.venue) {
-        this.venue = new Venue(eventData.venue);
+    if (venue) {
+        this.venue = venue;
     }
 
-    this.attendance = parseInt(eventData.attendance || 0);
+    this.attendance = parseInt(attendance || '0');
 
-    this.headliner = eventData.artists.headliner || [];
+    this.headliner = headliner || '';
 };
 
-var Artist = function(artistData) {
+var Artist = function(name, id, onTour, image, summary) {
     'use strict';
 
-    this.name = artistData.name || '';
-    this.mbid = artistData.mbid || '';
-    this.ontour = artistData.ontour || '0';
-    this.image = artistData.image[2]['#text'] || 'images/concert.jpg';
-    this.bio = artistData.bio.summary || '';
+    this.name = name || '';
+    this.mbid = id || '';
+    this.ontour = onTour || '0';
+    this.image = image || 'images/concert.jpg';
+    this.bio = summary || '';
 };
 
 var OnTheRoadVM = function() {
@@ -94,10 +92,14 @@ var OnTheRoadVM = function() {
     });
 
     self.searchText.subscribe(function() {
-      self.searchEvents();
+        self.searchEvents();
     });
 
     self.dateFilter = ko.observable('all');
+
+    self.apiEngine = ko.observable('lastfm').extend({
+        localStore: 'OntheRoad-Search-Engine'
+    });
 
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
         if (artist) {
@@ -123,9 +125,6 @@ var OnTheRoadVM = function() {
                         if (serverData.events.event) {
                             var results = serverData.events.event;
                             var numResults = (serverData.events['@attr'] !== undefined) ? Math.min(serverData.events['@attr'].perPage, serverData.events['@attr'].total) : serverData.events.total;
-
-                            console.log(results);
-
                             // The API DOES NOT return an array if there is only one result
                             if (numResults === 1) {
                                 self.eventList.push(new Event(results));
@@ -141,6 +140,7 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
+                        document.querySelector('#toastNoEvents').show();
                     }
                 },
                 error: function(e) {
@@ -176,15 +176,119 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
+                        document.querySelector('#toastNoArtist').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
                 }
             });
+        }
+    };
+
+
+    self.loadEventsFromSongkick = function(artist, pageToLoad) {
+        if (artist) {
+            if (self.xhrEvents) {
+                self.xhrEvents.abort();
+            }
+
+            // Clear previous results
+            if (!pageToLoad || pageToLoad === 1) {
+                self.eventList([]);
+                self.totalPages(0);
+                self.currentPage(0);
+            }
+
+            var songkickAPIURL = 'http://api.songkick.com/api/3.0/artists/@@artist@@/calendar.json?apikey=l3aDt08aR6bme4z3&page=@@page@@';
+
+            songkickAPIURL = songkickAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad || '1');
+
+            self.xhrEvents = $.ajax({
+                url: songkickAPIURL,
+                success: function(serverData) {
+                    if (serverData && serverData.resultsPage.status === 'ok') {
+                        var results = serverData.resultsPage.results;
+                        if (results.event && results.event.length > 0) {
+                            self.eventList(ko.utils.arrayMap(results.event, function(event) {
+                                var venue;
+                                if (event.venue) {
+                                    venue = new Venue(
+                                        event.venue.displayName, {
+                                            'latitude': event.venue.lat,
+                                            'longitude': event.venue.lng
+                                        },
+                                        null,
+                                        event.location.city,
+                                        null, null,
+                                        event.venue.uri);
+                                }
+                                return new Event(event.displayName, event.uri, event.start.date, null, venue, null, null);
+                            }));
+                        } else {
+                            document.querySelector('#toastNoEvents').show();
+                        }
+                    } else {
+                        document.querySelector('#toastAPIError').show();
+                    }
+                },
+                error: function(e) {
+                    console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
+                },
+                fail: function(e) {
+                    console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
+                }
+            });
+        }
+    };
+
+    self.getArtistInfoFromSongkick = function(artist) {
+        if (artist) {
+            if (self.xhrArtist) {
+                // Cancel previous call
+                self.xhrArtist.abort();
+            }
+
+            var songkickAPIURL = 'http://api.songkick.com/api/3.0/search/artists.json?query=@@artist@@&apikey=l3aDt08aR6bme4z3';
+
+            songkickAPIURL = songkickAPIURL.replace('@@artist@@', artist);
+
+            self.xhrArtist = $.ajax({
+                url: songkickAPIURL,
+                success: function(serverData) {
+                    if (serverData && serverData.resultsPage.status === 'ok') {
+                        var results = serverData.resultsPage.results;
+                        if (results.artist && results.artist.length > 0) {
+                            var bestResult = results.artist[0];
+                            self.currentArtist(new Artist(bestResult.displayName, bestResult.id, (bestResult.onTourUntil) ? '1' : '0'));
+                            self.loadEventsFromSongkick(bestResult.id);
+                        } else {
+                            document.querySelector('#toastNoArtist').show();
+                        }
+                    } else {
+                        document.querySelector('#toastAPIError').show();
+                    }
+                },
+                error: function(e) {
+                    console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
+
+                },
+                fail: function(e) {
+                    console.log(e.message || e.statusText);
+                    document.querySelector('#toastAPIError').show();
+
+                }
+            });
+        } else {
+            console.log('Not query string provided');
         }
     };
 
@@ -219,8 +323,12 @@ var OnTheRoadVM = function() {
 
     self.searchEvents = function() {
         if (self.searchText() !== '') {
-            self.loadEventsFromLastFm(self.searchText(), 1);
-            self.getArtistInfoFromLastFm(self.searchText());
+            if (self.apiEngine() === 'lastfm') {
+                self.loadEventsFromLastFm(self.searchText(), 1);
+                self.getArtistInfoFromLastFm(self.searchText());
+            } else {
+                self.getArtistInfoFromSongkick(self.searchText(), 1);
+            }
         }
     };
 
