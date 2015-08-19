@@ -18,7 +18,7 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-    <!-- build:js scripts/vendor/modernizr.js -->
+    <link rel="import" href="/bower_components/paper-toast/paper-toast.html" <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 </head>
@@ -111,6 +111,9 @@
                     </div>
                 </div>
             </div>
+            <paper-toast id="toastAPIError" role="alert" text="Error retrieving results">
+                <div style="color: #eeff41;" onclick="console.log('RETRY')">Retry</div>
+            </paper-toast>
         </main>
     </div>
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->

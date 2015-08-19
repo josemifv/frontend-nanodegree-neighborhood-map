@@ -141,9 +141,11 @@ var OnTheRoadVM = function() {
                 },
                 error: function(e) {
                     console.log(e.message);
+                    document.querySelector('#toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message);
+                    document.querySelector('#toastAPIError').show();
                 }
             });
         }
