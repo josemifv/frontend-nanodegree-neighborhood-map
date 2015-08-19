@@ -33,6 +33,7 @@ To running it in a development environment, just run the following command: `gul
 * [Udacity's JavaScript Design Patterns course](https://www.udacity.com/course/javascript-design-patterns--ud989).
 * [Google's Material Design Lite Components Library](http://www.getmdl.io/).
 * [Google Maps v3 API Reference website](https://developers.google.com/maps/documentation/javascript/reference).
+* [KnockoutJS official website](http://knockoutjs.com/).
 * [StackOverflow website](http://stackoverflow.com/).
 * [5 ways to customize Google Maps InfoWindow](http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html).
 * [Yeoman's Gulp Webapp generator](https://github.com/yeoman/generator-gulp-webapp).
