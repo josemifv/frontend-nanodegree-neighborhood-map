@@ -304,7 +304,7 @@ var OnTheRoadVM = function() {
             var eventDate = new Date(event.date);
             switch (self.dateFilter()) {
                 case 'today':
-                    return (eventDate.getDay() === now.getDay());
+                    return (eventDate.getDate() === now.getDate());
                 case 'month':
                     return (eventDate.getMonth() === now.getMonth());
                 case 'year':
