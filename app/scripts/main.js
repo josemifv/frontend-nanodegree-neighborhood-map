@@ -97,7 +97,7 @@ var OnTheRoadVM = function() {
 
     self.dateFilter = ko.observable('all');
 
-    self.apiEngine = ko.observable('lastfm').extend({
+    self.apiEngine = ko.observable('songkick').extend({
         localStore: 'OntheRoad-Search-Engine'
     });
 
@@ -140,16 +140,16 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
-                        document.querySelector('#toastNoEvents').show();
+                        $('#toastNoEvents').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 }
             });
         }
@@ -176,16 +176,16 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
-                        document.querySelector('#toastNoArtist').show();
+                        $('#toastNoArtist').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 }
             });
         }
@@ -231,19 +231,20 @@ var OnTheRoadVM = function() {
                                 return new Event(event.displayName, event.uri, event.start.date, null, venue, null, null);
                             }));
                         } else {
-                            document.querySelector('#toastNoEvents').show();
+                            $('#toastNoEvents').show();
                         }
                     } else {
-                        document.querySelector('#toastAPIError').show();
+                        console.log(serverData);
+                        $('#toastAPIError').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
                 }
             });
         }
@@ -270,20 +271,21 @@ var OnTheRoadVM = function() {
                             self.currentArtist(new Artist(bestResult.displayName, bestResult.id, (bestResult.onTourUntil) ? '1' : '0'));
                             self.loadEventsFromSongkick(bestResult.id);
                         } else {
-                            document.querySelector('#toastNoArtist').show();
+                            $('#toastNoArtist').show();
                         }
                     } else {
-                        document.querySelector('#toastAPIError').show();
+                        console.log(serverData);
+                        $('#toastAPIError').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
 
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    document.querySelector('#toastAPIError').show();
+                    $('#toastAPIError').show();
 
                 }
             });

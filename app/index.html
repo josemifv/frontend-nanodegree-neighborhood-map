@@ -18,7 +18,11 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
-    <link rel="import" href="/bower_components/paper-toast/paper-toast.html" <!-- build:js scripts/vendor/modernizr.js -->
+    <!-- build:js scripts/vendor/webcomponents.js -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <!-- endbuild -->
+    <link rel="import" href="/bower_components/paper-toast/paper-toast.html" />
+    <!-- build:js scripts/vendor/modernizr.js -->
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 </head>
@@ -50,7 +54,7 @@
             </header>
             <div class="mdl-grid">
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-                  <h5>Filter gigs</h5>
+                    <h5>Filter gigs</h5>
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-0">
@@ -83,7 +87,7 @@
                     </label>
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
-                  <h5>Search engine</h5>
+                    <h5>Search engine</h5>
                 </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                     <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="option-4">
@@ -102,28 +106,26 @@
         </div>
         <div id="progress-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
         <main class="mdl-layout__content mdl-color--grey-100">
-            <div class="page-content">
-                <div id="map-container" class="mdl-grid">
-                    <div id="map-canvas" class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone"></div>
-                    <div id="results-list" class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--2-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
-                        <div class="mdl-grid" data-bind="foreach: filteredEventList">
-                            <div class="mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="event: { click: $parent.selectMarker }">
-                                <div class="mdl-card__title" data-bind="attr: { style: 'background: url(\'' + image + '\') center / cover' }">
-                                    <h2 class="mdl-card__title-text" data-bind="text: title"></h2>
-                                </div>
-                                <div class="mdl-card__supporting-text">
-                                    <strong data-bind="text: venue.name"></strong>
-                                    <br/>
-                                    <span data-bind="text: venue.city"></span>, <span data-bind="text: venue.country"></span>
-                                    <br/>
-                                    <br/>
-                                    <span data-bind="text: moment(date).format('LL')"></span>
-                                </div>
+            <div id="map-canvas"></div>
+            <div class="mdl-grid">
+                <div id="results-list" class="mdl-cell mdl-cell--3-col mdl-cell--3-col-tablet mdl-cell--2-col-phone mdl-color--grey-100 mdl-shadow--4dp" data-bind="visible: filteredEventList().length > 0">
+                    <div class="mdl-grid" data-bind="foreach: filteredEventList">
+                        <div class="mdl-card mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="event: { click: $parent.selectMarker }">
+                            <div class="mdl-card__title" data-bind="attr: { style: 'background: url(\'' + image + '\') center / cover' }">
+                                <h2 class="mdl-card__title-text" data-bind="text: title"></h2>
+                            </div>
+                            <div class="mdl-card__supporting-text">
+                                <strong data-bind="text: venue.name"></strong>
+                                <br/>
+                                <span data-bind="text: venue.city"></span>, <span data-bind="text: venue.country"></span>
+                                <br/>
+                                <br/>
+                                <span data-bind="text: moment(date).format('LL')"></span>
                             </div>
                         </div>
-                        <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: currentPage() < totalPages()">
-                            <button id="more" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" data-bind="{ click: loadNextPage, disable: currentPage() == totalPages() }">Show more results</button>
-                        </div>
+                    </div>
+                    <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: currentPage() < totalPages()">
+                        <button id="more" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" data-bind="{ click: loadNextPage, disable: currentPage() == totalPages() }">Show more results</button>
                     </div>
                 </div>
             </div>
