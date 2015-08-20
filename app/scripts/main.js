@@ -101,6 +101,10 @@ var OnTheRoadVM = function() {
         localStore: 'OntheRoad-Search-Engine'
     });
 
+    self.apiEngine.subscribe(function() {
+        self.searchEvents();
+    });
+
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
         if (artist) {
             if (self.xhrEvents) {
@@ -171,8 +175,9 @@ var OnTheRoadVM = function() {
                 success: function(serverData) {
                     if (!serverData.error) {
                         if (serverData.artist && serverData.artist.name !== 'Undefined') {
-                            self.currentArtist(new Artist(serverData.artist));
-                            self.searchText(serverData.artist.name);
+                            var returnedArtist = serverData.artist;
+                            self.currentArtist(new Artist(returnedArtist.name, returnedArtist.mbid, returnedArtist.ontour, returnedArtist.image[0]['#text'], returnedArtist.bio.summary));
+                            self.searchText(returnedArtist.name);
                         }
                     } else {
                         console.log(serverData.message);
