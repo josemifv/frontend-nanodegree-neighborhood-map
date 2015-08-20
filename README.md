@@ -20,7 +20,15 @@ The repository includes the following files:
 * **package.json**: Manifest file used by [NPM](http://www.npmjs.com/) package manager.
 
 ### Building the application from the source
-TODO
+- Install Yeoman, GulpJS and Bower: `npm install --global yo gulp bower`
+- Install NPM dependencies: `npm install`
+- Install Bower dependencies: `bower install`
+- Run `gulp serve` to preview and watch for changes
+- Run `bower install --save <package>` to install frontend dependencies
+- Run `gulp serve:test` to run the tests in the browser
+- Run `gulp` to build your webapp for production
+- Run `gulp serve:dist` to preview the production build
+- Run `gulp deploy` to deploy webapp to GitHub pages
 
 ### Running the application
 Just visit the following [link](http://josemifv.github.io/frontend-nanodegree-neighborhood-map/).
