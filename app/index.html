@@ -80,12 +80,6 @@
                         <span class="mdl-radio__label">This year's gigs</span>
                     </label>
                 </div>
-                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: filteredEventList().length > 0">
-                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                        <input type="checkbox" id="switch-1" class="mdl-switch__input" data-bind="checked: showResultList" />
-                        <span class="mdl-switch__label">Show result list</span>
-                    </label>
-                </div>
                 <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
                     <h5>Search engine</h5>
                 </div>
@@ -101,7 +95,15 @@
                         <span class="mdl-radio__label">Songkick</span>
                     </label>
                 </div>
-                <div class="mdl-layout-spacer"></div>
+            </div>
+            <div class="mdl-layout-spacer"></div>
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone" data-bind="visible: filteredEventList().length > 0">
+                    <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
+                        <input type="checkbox" id="switch-1" class="mdl-switch__input" data-bind="checked: showResultList" />
+                        <span class="mdl-switch__label">Show result list</span>
+                    </label>
+                </div>
             </div>
         </div>
         <div id="progress-bar" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
