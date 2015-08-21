@@ -95,6 +95,10 @@ main {
 
 .pull-right {
     float: right !important;
+    img {
+      width: 72px;
+      height: auto;
+    }
 }
 
 paper-toast {

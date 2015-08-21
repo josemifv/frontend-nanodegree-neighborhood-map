@@ -2,6 +2,10 @@
 /* global $, google */
 /* exported MapsService */
 
+/**
+ * Service that manages all operations with the map.
+ * @return MapService instance
+ */
 var MapsService = new (function() {
     'use strict';
 
@@ -9,6 +13,9 @@ var MapsService = new (function() {
 
     var map, infoWindow;
     var markers = [];
+    var apiEngine;
+
+    // GETTERS AND SETTERS
 
     self.getMap = function() {
         return map;
@@ -22,6 +29,9 @@ var MapsService = new (function() {
         return markers;
     };
 
+    /**
+     * It removes all markers in the map.
+     */
     self.clearMarkers = function() {
         markers.forEach(function(marker) {
             if (marker) {
@@ -31,6 +41,10 @@ var MapsService = new (function() {
         markers = [];
     };
 
+    /**
+     * It added a marker in the map.
+     * @param  {Event} Event linked to the marker.
+     */
     self.createMarker = function(event) {
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(event.venue.location.latitude, event.venue.location.longitude),
@@ -48,6 +62,9 @@ var MapsService = new (function() {
         return marker;
     };
 
+    /**
+     * It fits the map bounds to the markers in the map.
+     */
     self.fitBounds = function() {
         // Source --> http://stackoverflow.com/questions/15299113/google-maps-v3-fitbounds-on-visible-markers
         var bounds = new google.maps.LatLngBounds();
@@ -62,6 +79,10 @@ var MapsService = new (function() {
         }
     };
 
+    /**
+     * It adds a bounce-twice effect to a marker.
+     * @param  {google.maps.Marker} Marker.
+     */
     self.bounceOnce = function(marker) {
         marker.setAnimation(google.maps.Animation.BOUNCE);
         setTimeout(function() {
@@ -69,6 +90,10 @@ var MapsService = new (function() {
         }, 1400);
     };
 
+    /**
+     * It generates the infowindow containg all info from an event.
+     * @param  {Event} Event.
+     */
     self.createInfoWindowContent = function(event) {
         var content = '<div class="mdl-card">';
         content += '<div class="mdl-card__title" style="background: url(@@eventImage@@) center / cover">';
@@ -79,10 +104,10 @@ var MapsService = new (function() {
         content += '<br/>';
         content += '<span>@@venueName@@</span>';
         content += '<br/>';
-        content += '<span>@@venueCity@@, @@venueCountry@@</span>';
+        content += '<span>@@venueCity@@ @@venueCountry@@</span>';
         content += '<br/>';
-        content += '<span>@@attendance@@ going</span>';
-        content += '<span class="pull-right">Powered by <a target="_blank" href="http://www.last.fm">Last.fm</a></span>';
+        content += '<span>@@attendance@@</span>';
+        content += '<span class="pull-right">@@attribution@@</span>';
         content += '</div>';
         content += '<div class="mdl-card__menu">';
         content += '<button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" onclick="MapsService.getInfoWindow().close()">';
@@ -98,13 +123,32 @@ var MapsService = new (function() {
         content = content.replace('@@venueName@@', event.venue.name);
         content = content.replace('@@venueCity@@', event.venue.city);
         content = content.replace('@@venueCountry@@', event.venue.country);
+
+        if (apiEngine === 'lastfm') {
+            content = content.replace('@@attribution@@', 'Powered by <a target="_blank" href="@@website@@">Last.fm</a>');
+            content = content.replace('@@website@@', (event.website && event.website !== '') ? event.website : 'http://www.last.fm');
+        } else {
+            content = content.replace('@@attribution@@', '<a target="_blank" href="@@website@@"><img src="images/songkick-logo.png"></a>');
+            content = content.replace('@@website@@', (event.website && event.website !== '') ? event.website : 'http://www.songkick.com');
+        }
+
         return content;
     };
 
-    self.selectMarker = function(markerIndex) {
+    /**
+     * It simulates a click on a marker.
+     * @param  {[type]} markerIndex [description]
+     * @param  {[type]} engine      [description]
+     */
+    self.selectMarker = function(markerIndex, engine) {
+        apiEngine = engine;
         google.maps.event.trigger(markers[markerIndex], 'click');
     };
 
+    /**
+     * Map initialization.
+     * @param  {DOMElement} mapCanvasId Canvas that will contain the map.
+     */
     self.initializeMap = function(mapCanvasId) {
         var caceres = new google.maps.LatLng(39.476, -6.372);
         var mapOptions = {
@@ -123,6 +167,9 @@ var MapsService = new (function() {
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     };
 
+    /**
+     * InfoWindow initialization.
+     */
     self.initializeInfoWindow = function() {
         // Initialize the InfoWindow
         infoWindow = new google.maps.InfoWindow();
