@@ -22,6 +22,17 @@ ko.extenders.localStore = function(target, key) {
     return result;
 };
 
+/**
+ * Class to store info from a venue.
+ *
+ * @param {string} name       Venue name
+ * @param {Object} location   Venue location (latitude and longitude).
+ * @param {string} street     Venue street.
+ * @param {string} city       Venue city.
+ * @param {string} country    Venue country.
+ * @param {string} postalcode Venue postalcode.
+ * @param {string} website    Venue website.
+ */
 var Venue = function(name, location, street, city, country, postalcode, website) {
     'use strict';
 
@@ -32,13 +43,24 @@ var Venue = function(name, location, street, city, country, postalcode, website)
         longitude: location.longitude
     };
 
-    this.street = street;
-    this.city = city;
-    this.country = country;
+    this.street = street || '';
+    this.city = city || '';
+    this.country = country || '';
     this.postalcode = postalcode || '';
     this.website = website || '';
 };
 
+/**
+ * Class to store info from an event.
+ *
+ * @param {string} title      Event title.
+ * @param {string} website    Event website.
+ * @param {string} date       Event date.
+ * @param {string} image      Event-related image url.
+ * @param {Venue}  venue      Event venue.
+ * @param {string} attendance Event attendance.
+ * @param {string} headliner  Event headliner.
+ */
 var Event = function(title, website, date, image, venue, attendance, headliner) {
     'use strict';
 
@@ -51,11 +73,28 @@ var Event = function(title, website, date, image, venue, attendance, headliner) 
         this.venue = venue;
     }
 
-    this.attendance = parseInt(attendance || '0');
+    if (attendance) {
+        this.attendance = attendance + '  going';
+    } else {
+        this.attendance = 'No data about attendance found';
+    }
 
-    this.headliner = headliner || '';
+    if (headliner) {
+        this.headliner = headliner || '';
+    } else {
+        this.headliner = 'Unknown';
+    }
 };
 
+/**
+ * Class to store info from an artist.
+ *
+ * @param {[type]} name    [description]
+ * @param {[type]} id      [description]
+ * @param {[type]} onTour  [description]
+ * @param {[type]} image   [description]
+ * @param {[type]} summary [description]
+ */
 var Artist = function(name, id, onTour, image, summary) {
     'use strict';
 
@@ -66,6 +105,9 @@ var Artist = function(name, id, onTour, image, summary) {
     this.bio = summary || '';
 };
 
+/**
+ * Application ViewModel.
+ */
 var OnTheRoadVM = function() {
     'use strict';
 
@@ -73,7 +115,6 @@ var OnTheRoadVM = function() {
 
     self.xhrArtist = undefined;
     self.xhrEvents = undefined;
-    self.xhrPlaces = undefined;
 
     self.currentArtist = ko.observable().extend({
         localStore: 'OntheRoad-Current-Artist'
@@ -92,6 +133,7 @@ var OnTheRoadVM = function() {
     });
 
     self.searchText.subscribe(function() {
+        // Perform search on text input
         self.searchEvents();
     });
 
@@ -102,9 +144,16 @@ var OnTheRoadVM = function() {
     });
 
     self.apiEngine.subscribe(function() {
+        // Perform search if API Engine changes
         self.searchEvents();
     });
 
+    /**
+     * It loads all upcoming events from an artist from LastFM API.
+     *
+     * @param  {string} artist     Artist name.
+     * @param  {int}    pageToLoad Page to load (just in case we want to load a concrete page from the API).
+     */
     self.loadEventsFromLastFm = function(artist, pageToLoad) {
         if (artist) {
             if (self.xhrEvents) {
@@ -159,6 +208,11 @@ var OnTheRoadVM = function() {
         }
     };
 
+    /**
+     * It loads info from an artist from LastFM API.
+     *
+     * @param  {string} artist Artist name.
+     */
     self.getArtistInfoFromLastFm = function(artist) {
         var lastFmAPIURL = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&api_key=091752a3717719e4d40441a0127c8914&format=json&autocorrect=1&artist=@@artist@@';
 
@@ -196,7 +250,12 @@ var OnTheRoadVM = function() {
         }
     };
 
-
+    /**
+     * It loads all upcoming events from an artist from Songkick API.
+     *
+     * @param  {string} artist     Artist name.
+     * @param  {int}    pageToLoad Page to load (just in case we want to load a concrete page from the API).
+     */
     self.loadEventsFromSongkick = function(artist, pageToLoad) {
         if (artist) {
             if (self.xhrEvents) {
@@ -255,6 +314,11 @@ var OnTheRoadVM = function() {
         }
     };
 
+    /**
+     * It loads info from an artist from Songkick API.
+     *
+     * @param  {string} artist Artist name.
+     */
     self.getArtistInfoFromSongkick = function(artist) {
         if (artist) {
             if (self.xhrArtist) {
@@ -301,10 +365,16 @@ var OnTheRoadVM = function() {
         }
     };
 
+    /**
+     * Flag to indicate if there is a current artist or not.
+     */
     self.isThereArtist = ko.computed(function() {
         return self.currentArtist() instanceof Artist;
     });
 
+    /**
+     * List of filtered events (according to Gigs filters).
+     */
     self.filteredEventList = ko.computed(function() {
         return ko.utils.arrayFilter(self.eventList(), function(event) {
             var now = new Date();
@@ -322,7 +392,10 @@ var OnTheRoadVM = function() {
         });
     });
 
-    self.markersList = ko.computed(function() {
+    /**
+     * Function that updates markers in the map according to the filtered results.
+     */
+    self.updateMarkerList = ko.computed(function() {
         MapsService.clearMarkers();
         ko.utils.arrayForEach(self.filteredEventList(), function(event) {
             MapsService.getMarkers().push(MapsService.createMarker(event));
@@ -330,6 +403,9 @@ var OnTheRoadVM = function() {
         MapsService.fitBounds();
     });
 
+    /**
+     * It performs the search (Artist and Evennts).
+     */
     self.searchEvents = function() {
         if (self.searchText() !== '') {
             if (self.apiEngine() === 'lastfm') {
@@ -341,23 +417,38 @@ var OnTheRoadVM = function() {
         }
     };
 
+    /**
+     * [isLastPage description]
+     * @return {Boolean} True if current page is the last page of the results.
+     */
     self.isLastPage = function() {
         return self.currentPage() === self.totalPages();
     };
 
+    /**
+     * It retrieves the next results page.
+     */
     self.loadNextPage = function() {
         if (self.currentPage() < self.totalPages()) {
             self.loadEventsFromLastFm(self.searchText(), parseInt(self.currentPage()) + 1);
         }
     };
 
+    /**
+     * It shows an InwoWindow containing the info from an Event
+     * @param  {[type]} event [description]
+     * @return {[type]}       [description]
+     */
     self.selectMarker = function(event) {
         var markersIndex = ko.utils.arrayIndexOf(self.filteredEventList(), event);
-        MapsService.selectMarker(markersIndex);
+        MapsService.selectMarker(markersIndex, self.apiEngine());
     };
 
     self.showResultList = ko.observable(true);
 
+    /**
+     * It shows or hides the result list according to results list switch state.
+     */
     self.updateResultList = ko.computed(function() {
         if (self.showResultList()) {
             $('results-list').show();
@@ -367,6 +458,7 @@ var OnTheRoadVM = function() {
     });
 };
 
+// App initialization
 $(function() {
     'use strict';
 
