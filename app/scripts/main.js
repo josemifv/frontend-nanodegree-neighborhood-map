@@ -451,9 +451,9 @@ var OnTheRoadVM = function() {
      */
     self.updateResultList = ko.computed(function() {
         if (self.showResultList()) {
-            $('results-list').show();
+            $('#results-list').show();
         } else {
-            $('results-list').hide();
+            $('#results-list').hide();
         }
     });
 };
