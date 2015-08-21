@@ -85,6 +85,10 @@ gulp.task('fonts', () => {
     .pipe(gulp.dest('dist/fonts'));
 });
 
+gulp.task('components', () => {
+  return gulp.src('app/components/**/*').pipe(gulp.dest('dist/components'));
+});
+
 gulp.task('extras', () => {
   return gulp.src([
     'app/*.*',
@@ -103,7 +107,8 @@ gulp.task('serve', ['styles', 'fonts'], () => {
     server: {
       baseDir: ['.tmp', 'app'],
       routes: {
-        '/bower_components': 'bower_components'
+        '/bower_components': 'bower_components',
+        '/components': 'components'
       }
     }
   });
@@ -162,7 +167,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras', 'components'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

@@ -144,16 +144,16 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
-                        $('#toastNoEvents').show();
+                        document.getElementById('toastNoEvents').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 }
             });
         }
@@ -181,16 +181,16 @@ var OnTheRoadVM = function() {
                         }
                     } else {
                         console.log(serverData.message);
-                        $('#toastNoArtist').show();
+                        document.getElementById('toastNoArtist').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 }
             });
         }
@@ -236,20 +236,20 @@ var OnTheRoadVM = function() {
                                 return new Event(event.displayName, event.uri, event.start.date, null, venue, null, null);
                             }));
                         } else {
-                            $('#toastNoEvents').show();
+                            document.getElementById('toastNoEvents').show();
                         }
                     } else {
                         console.log(serverData);
-                        $('#toastAPIError').show();
+                        document.getElementById('toastAPIError').show();
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
                 }
             });
         }
@@ -276,21 +276,23 @@ var OnTheRoadVM = function() {
                             self.currentArtist(new Artist(bestResult.displayName, bestResult.id, (bestResult.onTourUntil) ? '1' : '0'));
                             self.loadEventsFromSongkick(bestResult.id);
                         } else {
-                            $('#toastNoArtist').show();
+                            document.getElementById('toastNoArtist').show();
+
                         }
                     } else {
                         console.log(serverData);
-                        $('#toastAPIError').show();
+                        document.getElementById('toastAPIError').show();
+
                     }
                 },
                 error: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
 
                 },
                 fail: function(e) {
                     console.log(e.message || e.statusText);
-                    $('#toastAPIError').show();
+                    document.getElementById('toastAPIError').show();
 
                 }
             });
@@ -358,9 +360,9 @@ var OnTheRoadVM = function() {
 
     self.updateResultList = ko.computed(function() {
         if (self.showResultList()) {
-            $('#results-list').show();
+            $('results-list').show();
         } else {
-            $('#results-list').hide();
+            $('results-list').hide();
         }
     });
 };
