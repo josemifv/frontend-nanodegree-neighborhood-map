@@ -33,7 +33,7 @@ The repository includes the following files:
 ### Running the application
 Just visit the following [link](http://josemifv.github.io/frontend-nanodegree-neighborhood-map/).
 
-To running it in a development environment, just run the following command: `gulp serve`. A browser window will be opened and the application will be loaded.
+To run it in a development environment, just run the following command: `gulp serve`. A browser window will be opened and the application will be loaded.
 
 
 ### Resources used to complete this project
@@ -42,6 +42,7 @@ To running it in a development environment, just run the following command: `gul
 * [Google's Material Design Lite Components Library](http://www.getmdl.io/).
 * [Google Maps v3 API Reference website](https://developers.google.com/maps/documentation/javascript/reference).
 * [KnockoutJS official website](http://knockoutjs.com/).
+* [Google's Polymer project](https://www.polymer-project.org/1.0/).
 * [StackOverflow website](http://stackoverflow.com/).
 * [5 ways to customize Google Maps InfoWindow](http://en.marnoto.com/2014/09/5-formas-de-personalizar-infowindow.html).
 * [Yeoman's Gulp Webapp generator](https://github.com/yeoman/generator-gulp-webapp).
