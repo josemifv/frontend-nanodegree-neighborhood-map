@@ -422,7 +422,7 @@ var OnTheRoadVM = function() {
     };
 
     /**
-     * [isLastPage description]
+     * It checks if current page is last page.
      * @return {Boolean} True if current page is the last page of the results.
      */
     self.isLastPage = function() {
@@ -440,8 +440,7 @@ var OnTheRoadVM = function() {
 
     /**
      * It shows an InwoWindow containing the info from an Event
-     * @param  {[type]} event [description]
-     * @return {[type]}       [description]
+     * @param  {Event} event Selected event.
      */
     self.selectMarker = function(event) {
         var markersIndex = ko.utils.arrayIndexOf(self.filteredEventList(), event);

@@ -21,17 +21,22 @@ body {
 }
 
 .mdl-layout__drawer header {
-    min-height: 180px;
+    min-height: 100px;
     color: #FFF;
     background: #3E4EB8;
 }
 
-.mdl-layout__drawer .mdl-layout-title {
+.mdl-layout__drawer {
+  .mdl-layout-title {
     position: relative;
     width: 100%;
     padding: 16px;
     text-align: center;
     height: inherit;
+}
+label {
+  display: block;
+}
 }
 
 #progress-bar {
