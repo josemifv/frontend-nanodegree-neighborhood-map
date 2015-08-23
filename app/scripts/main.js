@@ -269,12 +269,14 @@ var OnTheRoadVM = function() {
                 self.currentPage(0);
             }
 
-            var songkickAPIURL = 'http://api.songkick.com/api/3.0/artists/@@artist@@/calendar.json?apikey=l3aDt08aR6bme4z3&page=@@page@@';
+            var songkickAPIURL = 'http://api.songkick.com/api/3.0/artists/@@artist@@/calendar.json?apikey=l3aDt08aR6bme4z3&page=@@page@@&jsoncallback=?';
 
             songkickAPIURL = songkickAPIURL.replace('@@artist@@', artist).replace('@@page@@', pageToLoad || '1');
 
             self.xhrEvents = $.ajax({
                 url: songkickAPIURL,
+                dataType: 'jsonp',
+                jsonpCallback: 'jsoncallback',
                 success: function(serverData) {
                     if (serverData && serverData.resultsPage.status === 'ok') {
                         var results = serverData.resultsPage.results;
@@ -326,12 +328,14 @@ var OnTheRoadVM = function() {
                 self.xhrArtist.abort();
             }
 
-            var songkickAPIURL = 'http://api.songkick.com/api/3.0/search/artists.json?query=@@artist@@&apikey=l3aDt08aR6bme4z3';
+            var songkickAPIURL = 'http://api.songkick.com/api/3.0/search/artists.json?query=@@artist@@&apikey=l3aDt08aR6bme4z3&jsoncallback=?';
 
             songkickAPIURL = songkickAPIURL.replace('@@artist@@', artist);
 
             self.xhrArtist = $.ajax({
                 url: songkickAPIURL,
+                dataType: 'jsonp',
+                jsonpCallback: 'jsoncallback',
                 success: function(serverData) {
                     if (serverData && serverData.resultsPage.status === 'ok') {
                         var results = serverData.resultsPage.results;
