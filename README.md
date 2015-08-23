@@ -4,7 +4,7 @@ This project contains the source code of the implementation of the Fifth project
 The project consists of developing a single-page application featuring a map of your neighborhood or a neighborhood you would like to visit. You will then add additional functionality to this application, including: map markers to identify popular locations or places you’d like to visit, a search function to easily discover these locations, and a listview to support simple browsing of all locations. You will then research and implement third-party APIs that provide additional information about each of these locations (such as StreetView images, Wikipedia articles, Yelp reviews, etc).
 
 
-In this case, the web app allows to check if an artist or band is on tour. It is powered by [Last.fm's Developer API](http://www.last.fm/api).
+In this case, the web app allows to check if an artist or band is on tour. It is powered by [Last.fm's Developer API](http://www.last.fm/api) and [Songkick's Developer API](http://www.songkick.com/developer).
 
 The repository includes the following files:
 * **app directory**: It contains the source code of the web app.
@@ -35,6 +35,10 @@ Just visit the following [link](http://josemifv.github.io/frontend-nanodegree-ne
 
 To run it in a development environment, just run the following command: `gulp serve`. A browser window will be opened and the application will be loaded.
 
+To search if an artist is on tour just type the artist in the search box and, if upcoming events are found, these will be displayed on the map.
+
+### Important note
+Owing to Last.FM service migration [issues](https://getsatisfaction.com/lastfm/topics/api-known-issues), Last.fm API engine was disabled.
 
 ### Resources used to complete this project
 * [Udacity's Intro to AJAX course](https://www.udacity.com/course/intro-to-ajax--ud110).
